@@ -52,7 +52,7 @@ export default function PackagesSection() {
   return (
     <section
       id="packages"
-      className="md:py-36 py-20 bg-[#FAFDFF] transition-colors duration-300"
+      className="md:py-28 py-20 bg-[#FAFDFF] transition-colors duration-300"
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">

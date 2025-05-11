@@ -56,7 +56,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="py-20 transition-colors duration-300 bg-[#FAFDFF]"
+      className="md:py-28 py-20 transition-colors duration-300 bg-[#FAFDFF]"
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">

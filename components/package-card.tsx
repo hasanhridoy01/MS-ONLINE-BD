@@ -12,22 +12,22 @@ interface PackageCardProps {
 
 const colorVariants = {
   silver: {
-    bg: "bg-[#f9f9f9]",
+    bg: "bg-primary/10",
     accent: "text-primary",
     button: "border border-primary/40 text-primary hover:bg-primary/10",
   },
   gold: {
-    bg: "bg-[#fff7e6]",
+    bg: "bg-primary/10",
     accent: "text-primary",
     button: "border border-primary/40 text-primary hover:bg-primary/10",
   },
   platinum: {
-    bg: "bg-[#f8f7fc]",
+    bg: "bg-primary/10",
     accent: "text-primary",
     button: "border border-primary/40 text-primary hover:bg-primary/10",
   },
   diamond: {
-    bg: "bg-[#fef5f0]",
+    bg: "bg-primary/10",
     accent: "text-primary",
     button: "border border-primary/40 text-primary hover:bg-primary/10",
   },

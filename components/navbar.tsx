@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <header className="w-full backdrop-blur-3xl transition-all duration-300 md:py-5 py-4 fixed top-0 z-50">
-      <div className="container rounded-[24px] px-4 mx-auto sm:px-6">
+      <div className="container rounded-[24px] px-4 mx-auto md:px-2">
         {/* Top Bar */}
         <div className="bg-muted/30 py-2.5 transition-colors duration-300 rounded-tl-[24px] rounded-tr-[24px]">
           <div className="container mx-auto px-4">

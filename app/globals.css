@@ -113,7 +113,7 @@
   font-family: var(--font-roboto-sans);
 }
 .font-kalam {
-  font-family: var(--font-kalam-sans);
+  font-family: "Kalam", cursive;
 }
 
 .bg-grid-pattern {

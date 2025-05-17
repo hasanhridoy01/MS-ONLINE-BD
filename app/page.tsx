@@ -7,9 +7,9 @@ import TrustedSection from '@/components/trusted-section';
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col">
-      <PackagesSection />
+      <PackagesSection /> 
       <ServicesSection />
-      <TrustedSection />
+      {/* <TrustedSection /> */}
       <ContactSection />
       <Footer />
     </main>

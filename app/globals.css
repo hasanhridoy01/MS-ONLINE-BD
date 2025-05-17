@@ -65,7 +65,7 @@
 
   /* Dark Theme */
   [data-theme="dark"] {
-    --background: 223 35% 6%; /* darker background */
+    --background: 223 35% 6%; 
     --foreground: 220 20% 95%; /* brighter text */
     --card: 223 35% 7%;
     --card-foreground: 220 20% 95%;
@@ -166,4 +166,30 @@
 .container {
   max-width: 1140px;
   margin: 0 auto;
+}
+
+/* hero section */
+.hero-orange-bg-image{
+  background-image: url('/orange-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+.hero-blue-bg-image{
+  background-image: url('/blue-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+.hero-dark-bg-image{
+  background-image: url('/dark-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
 }

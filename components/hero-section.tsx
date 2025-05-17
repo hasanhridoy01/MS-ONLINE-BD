@@ -1,8 +1,21 @@
-import { ArrowRight, Globe } from "lucide-react";
+'use client';
+
+import { useTheme } from '@/lib/theme-provider';
+import { ArrowRight, Globe } from 'lucide-react';
 
 export default function HeroSection() {
+  const { theme } = useTheme();
+
+  const themeBackgroundClass = {
+    orange: 'hero-orange-bg-image',
+    blue: 'hero-blue-bg-image',
+    dark: 'hero-dark-bg-image',
+  }[theme];
+
   return (
-    <section className="relative md:mt-44 mt-36 py-28 mb-10 overflow-hidden bg-gradient-to-b from-background to-background/90 transition-colors duration-300">
+    <section
+      className={`relative min-h-screen flex flex-col items-center justify-center md:pt-56 pt-52 ${themeBackgroundClass}`}
+    >
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto">

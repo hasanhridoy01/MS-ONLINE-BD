@@ -1,7 +1,17 @@
+"use client";
+
 import React from "react";
 import ServicesCard from "./services-card";
+import { useTheme } from "@/lib/theme-provider";
 
 export default function ServicesSection() {
+  const { theme } = useTheme();
+
+  const themeBackgroundClass = {
+    orange: "orange-body-background-color",
+    blue: "blue-body-background-color",
+    dark: "dark-body-background-color",
+  }[theme];
   const services = [
     {
       icon: "/Frame 24.png",
@@ -63,7 +73,7 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="md:py-28 py-20 bg-[#FAFDFF] transition-colors duration-300"
+      className={`md:py-28 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">

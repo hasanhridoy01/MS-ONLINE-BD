@@ -193,3 +193,13 @@
   height: 100%;
   width: 100%;
 }
+
+.orange-body-background-color{
+  background-color: #FFFDFC;
+}
+.blue-body-background-color{
+  background-color: #FAFDFF;
+}
+.dark-body-background-color{
+  background-color: #FAFDFF;
+}

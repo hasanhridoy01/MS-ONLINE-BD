@@ -1,6 +1,17 @@
+"use client";
+
+import { useTheme } from "@/lib/theme-provider";
 import PackageCard from "./package-card";
 
 export default function PackagesSection() {
+  const { theme } = useTheme();
+
+  const themeBackgroundClass = {
+    orange: "orange-body-background-color",
+    blue: "blue-body-background-color",
+    dark: "dark-body-background-color",
+  }[theme];
+
   const packages = [
     {
       title: "Silver",
@@ -52,7 +63,8 @@ export default function PackagesSection() {
   return (
     <section
       id="packages"
-      className="md:py-28 py-20 bg-[#FAFDFF] transition-colors duration-300"
+      className=
+      {`md:py-28 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">

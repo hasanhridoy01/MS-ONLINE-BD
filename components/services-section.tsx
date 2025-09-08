@@ -1,79 +1,58 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ServicesCard from "./services-card";
 import { useTheme } from "@/lib/theme-provider";
+import axios from "axios";
+
+interface ServiceItem {
+  id: number;
+  type: string;
+  title: string;
+  description: string | null;
+  external_link: string | null;
+  attachment: string;
+}
+
+interface ServiceCategory {
+  type: string;
+  items: ServiceItem[];
+}
 
 export default function ServicesSection() {
   const { theme } = useTheme();
+  const [services, setServices] = useState<ServiceCategory[]>([]);
 
   const themeBackgroundClass = {
     orange: "orange-body-background-color",
     blue: "blue-body-background-color",
     dark: "dark-body-background-color",
   }[theme];
-  const services = [
-    {
-      icon: "/Frame 24.png",
-      title: "Internet Connectivity",
-      description:
-        "Dedicated High speed internet connectivity through primary and secondary link. LAN & WAN connectivity, High availability conne...",
-      link: "#",
-    },
-    {
-      icon: "/Frame 24 (1).png",
-      title: "Security & Surveillance",
-      description:
-        "Welcome to Ms Online BD , your trusted broadband internet service provider! In addition to promoting access to fast internet service , Sa...",
-      link: "#",
-    },
-    {
-      icon: "/Frame 24 (2).png",
-      title: "LAN & Maintenance",
-      description:
-        "Comprehensive LAN solutions and maintenance for your internet service needs in the Dhaka division. Experience seamless connectivity",
-      link: "#",
-    },
-    {
-      icon: "/Frame 24 (3).png",
-      title: "Bulk SMS Service",
-      description:
-        "Ms Online BD provides promotional Bulk SMS to all ANS Operators for our corporate customers. Our bulk SMS Service is a fully scalable comm",
-      link: "#",
-    },
-    {
-      icon: "/Frame 24 (4).png",
-      title: "Home Internet",
-      description:
-        "Welcome to Ms Online BD  “Home Internet,” where you can get a reliable, fast connection to the internet. With outstanding internet",
-      link: "#",
-    },
-    {
-      icon: "/Frame 24 (5).png",
-      title: "Data Connectivity",
-      description:
-        "Enhancing Efficiency and Communication Businesses of all sizes are using the power of data in today’s data-driven world to encour",
-      link: "#",
-    },
-    {
-      icon: "/Frame 24 (6).png",
-      title: "Customer Service",
-      description:
-        "Thank you for visiting Ms Online, your trusted internet service provider! At Sam, we think that providing excellent customer service is the ve...",
-      link: "#",
-    },
-    {
-      icon: "/Frame 24 (7).png",
-      title: "Online Payment Gateway",
-      description:
-        "Ms Online BD  provides instant and secure transaction to merchants through the online payment gateway. We have a single platform for all typ...",
-      link: "#",
-    },
-  ];
+  
+  const getServices = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/init`
+      );
+
+      console.log("Services response:", res.data);
+      setServices(res.data.data.features); // Changed from services to features
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
+  // Flatten all service items from all categories
+  const allServiceItems = services.flatMap(category => category.items);
+
   return (
     <section
       id="services"
-      className={`md:py-28 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
+      className={`md:py-24 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
@@ -86,8 +65,14 @@ export default function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((pkg, index) => (
-            <ServicesCard key={index} {...pkg} />
+          {allServiceItems.map((item) => (
+            <ServicesCard
+              key={item.id}
+              icon={item.attachment}
+              title={item.title}
+              description={item.description ? item.description.replace(/<[^>]*>/g, '') : 'No description available'}
+              link={item.external_link || '#'}
+            />
           ))}
         </div>
       </div>

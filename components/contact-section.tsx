@@ -3,9 +3,18 @@
 import { useState } from "react";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
+import axios from "axios";
+import useHandleSnackbar from "@/lib/HandleSnakbar";
 
 export default function ContactSection() {
   const { theme } = useTheme();
+  const handleSnackbarOpen = useHandleSnackbar();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [message, setMessage] = useState("");
+  const [service, setService] = useState("");
 
   const themeBackgroundClass = {
     orange: "orange-body-background-color",
@@ -13,53 +22,40 @@ export default function ContactSection() {
     dark: "dark-body-background-color",
   }[theme];
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    message: "",
-    service: [] as string[],
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setFormData({
-        ...formData,
-        service: [...formData.service, value],
-      });
-    } else {
-      setFormData({
-        ...formData,
-        service: formData.service.filter((item) => item !== value),
-      });
-    }
+  const handleServiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setService(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Reset form
-    setFormData({
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      message: "",
-      service: [],
-    });
-    alert("Form submitted successfully!");
+
+    // Create form data object
+    const formData = {
+      firstName,
+      lastName,
+      email,
+      mobile,
+      message,
+      service,
+    };
+    try {
+      const res = axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+        formData
+      )
+
+      handleSnackbarOpen("Successful", "success", 3000);
+      // Reset form
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setMobile("");
+      setMessage("");
+      setService("");
+    } catch (error) {
+      console.log("Error submitting form:", error);
+      handleSnackbarOpen("Failed", "error", 3000);
+    }
   };
 
   return (
@@ -93,8 +89,8 @@ export default function ContactSection() {
                     type="text"
                     id="firstName"
                     name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     placeholder="Enter First Name"
                     className="bg-white w-full px-3 py-2 border border-primary text-gray-700 rounded-[8px] text-[16px] font-medium font-inter focus:outline-none"
                     required
@@ -111,8 +107,8 @@ export default function ContactSection() {
                     type="text"
                     id="lastName"
                     name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     placeholder="Enter Last Name"
                     className="bg-white w-full px-3 py-2 border border-primary text-gray-700 rounded-[8px] text-[16px] font-medium font-inter focus:outline-none"
                     required
@@ -137,8 +133,8 @@ export default function ContactSection() {
                       type="tel"
                       id="phone"
                       name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
+                      value={mobile}
+                      onChange={(e) => setMobile(e.target.value)}
                       placeholder="Enter Phone Number"
                       className="bg-white px-3 py-2 text-gray-700 text-[16px] font-medium font-inter w-full focus:outline-none"
                       required
@@ -156,8 +152,8 @@ export default function ContactSection() {
                     type="email"
                     id="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@mail.com"
                     className="bg-white border border-primary w-full px-3 py-2 text-gray-700 rounded-[8px] text-[16px] font-medium font-inter focus:outline-none"
                     required
@@ -175,8 +171,8 @@ export default function ContactSection() {
                 <textarea
                   id="message"
                   name="message"
-                  value={formData.message}
-                  onChange={handleChange}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   placeholder="Leave us a message..."
                   rows={4}
                   className="bg-white border border-primary w-full px-3 py-2 text-gray-700 rounded-[8px] text-[16px] font-medium font-inter focus:outline-none"
@@ -191,12 +187,12 @@ export default function ContactSection() {
                 <div className="space-y-2">
                   <div className="flex items-center">
                     <input
-                      type="checkbox"
+                      type="radio"
                       id="newConnection"
                       name="service"
                       value="New Connection"
-                      checked={formData.service.includes("New Connection")}
-                      onChange={handleCheckboxChange}
+                      checked={service === "New Connection"}
+                      onChange={handleServiceChange}
                       className="h-4 w-4 text-primary border-input rounded"
                     />
                     <label
@@ -208,29 +204,29 @@ export default function ContactSection() {
                   </div>
                   <div className="flex items-center">
                     <input
-                      type="checkbox"
+                      type="radio"
                       id="changeConnection"
                       name="service"
-                      value="Change Connection"
-                      checked={formData.service.includes("Change Connection")}
-                      onChange={handleCheckboxChange}
+                      value="Internet Connection"
+                      checked={service === "Internet Connection"}
+                      onChange={handleServiceChange}
                       className="h-4 w-4 text-primary border-input rounded"
                     />
                     <label
                       htmlFor="changeConnection"
                       className="ml-2 text-[16px] font-[600] font-inter text-primary/80"
                     >
-                      Change Connection
+                      Internet Connection
                     </label>
                   </div>
                   <div className="flex items-center">
                     <input
-                      type="checkbox"
+                      type="radio"
                       id="otherService"
                       name="service"
                       value="Other"
-                      checked={formData.service.includes("Other")}
-                      onChange={handleCheckboxChange}
+                      checked={service === "Other"}
+                      onChange={handleServiceChange}
                       className="h-4 w-4 text-primary border-input rounded"
                     />
                     <label

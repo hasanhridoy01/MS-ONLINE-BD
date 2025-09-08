@@ -2,9 +2,50 @@
 
 import { useTheme } from "@/lib/theme-provider";
 import PackageCard from "./package-card";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface Deal {
+  type: string;
+  items: PackageItem[];
+}
+
+interface PackageItem {
+  id: number;
+  title: string;
+  attributes: Attribute[];
+  deal_type: string;
+  package: Package;
+  package_description: string | null;
+}
+
+interface Attribute {
+  label: string;
+  value: string;
+}
+
+interface Package {
+  id: number;
+  code: string;
+  name: string;
+  type: string;
+  price: number;
+  bandwidth: string;
+  speed: string;
+  status: number;
+  deletable: number;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+  branch_id: number;
+  router_id: number;
+  reseller_id: number | null;
+  reseller_commission: number;
+}
 
 export default function PackagesSection() {
   const { theme } = useTheme();
+  const [deals, setDeals] = useState<Deal[]>([]);
 
   const themeBackgroundClass = {
     orange: "orange-body-background-color",
@@ -12,59 +53,36 @@ export default function PackagesSection() {
     dark: "dark-body-background-color",
   }[theme];
 
-  const packages = [
-    {
-      title: "Silver",
-      price: 525,
-      speed: 10,
-      features: [
-        "Facebook Speed: 100Mbps",
-        "YouTube Speed: 100Mbps",
-        "FTP Speed: 100Mbps",
-        "IPv6 is available",
-      ],
-    },
-    {
-      title: "Gold",
-      price: 630,
-      speed: 15,
-      features: [
-        "Facebook Speed: 100Mbps",
-        "YouTube Speed: 100Mbps",
-        "FTP Speed: 100Mbps",
-        "IPv6 is available",
-      ],
-      popular: true,
-    },
-    {
-      title: "Platinum",
-      price: 840,
-      speed: 20,
-      features: [
-        "Facebook Speed: 100Mbps",
-        "YouTube Speed: 100Mbps",
-        "FTP Speed: 100Mbps",
-        "IPv6 is available",
-      ],
-    },
-    {
-      title: "Diamond",
-      price: 1050,
-      speed: 30,
-      features: [
-        "Facebook Speed: 100Mbps",
-        "YouTube Speed: 100Mbps",
-        "FTP Speed: 100Mbps",
-        "IPv6 is available",
-      ],
-    },
-  ];
+  const getPackage = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/init`
+      );
+      setDeals(res.data.data.deals);
+    } catch (error) {
+      console.error("Error fetching packages:", error);
+    }
+  };
+
+  useEffect(() => {
+    getPackage();
+  }, []);
+
+  // Extract features from attributes
+  const getFeatures = (attributes: Attribute[]): string[] => {
+    return attributes.map(attr => `${attr.label}: ${attr.value}`);
+  };
+
+  // Parse speed from string to number
+  const parseSpeed = (speedString: string): number => {
+    const match = speedString.match(/(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+  };
 
   return (
     <section
       id="packages"
-      className=
-      {`md:py-28 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
+      className={`md:py-24 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
@@ -77,10 +95,20 @@ export default function PackagesSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {packages.map((pkg, index) => (
-            <PackageCard key={index} {...pkg} />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {deals.map((deal) =>
+            deal.items.map((item) => (
+              <PackageCard
+                key={item.id}
+                title={item.title}
+                price={item.package.price}
+                speed={parseSpeed(item.package.speed)}
+                features={getFeatures(item.attributes)}
+                popular={false} 
+                color="silver" 
+              />
+            ))
+          )}
         </div>
       </div>
     </section>

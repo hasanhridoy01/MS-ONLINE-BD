@@ -5,6 +5,7 @@ import Link from "next/link";
 import ThemeSwitcher from "./theme-switcher";
 import { usePathname } from "next/navigation";
 import { Menu, X, Phone, Mail } from "lucide-react";
+import LoginModal from "./login-modal";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -102,9 +103,9 @@ export default function Navbar() {
               {/* Actions */}
               <div className="flex items-center gap-4">
                 <ThemeSwitcher />
-                <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 hidden lg:block transition-colors rounded-[8px] font-inter">
-                  LOGIN
-                </button>
+
+                {/* Login Modal */}
+                <LoginModal />
 
                 {/* Mobile Hamburger */}
                 <button

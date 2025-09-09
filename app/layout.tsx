@@ -4,6 +4,7 @@ import { Inter, Montserrat, Roboto, Kalam } from "next/font/google";
 import { ThemeProvider } from "@/lib/theme-provider";
 import Navbar from "@/components/navbar";
 import HeroSection from "@/components/hero-section";
+import AuthContextProvider from "@/context/AuthContext";
 
 const inter = Inter({
   variable: "--font-inter-sans",
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${montserrat.variable} ${roboto.variable} ${kalam.variable}`}
       >
+        <AuthContextProvider>
         <ThemeProvider>
           <div className="">
             <Navbar />
@@ -52,6 +54,7 @@ export default function RootLayout({
           </div>
           {children}
         </ThemeProvider>
+        </AuthContextProvider>
       </body>
     </html>
   );

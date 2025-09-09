@@ -9,8 +9,7 @@ import useHandleSnackbar from "@/lib/HandleSnakbar";
 export default function ContactSection() {
   const { theme } = useTheme();
   const handleSnackbarOpen = useHandleSnackbar();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [message, setMessage] = useState("");
@@ -31,8 +30,7 @@ export default function ContactSection() {
 
     // Create form data object
     const formData = {
-      firstName,
-      lastName,
+      name,
       email,
       mobile,
       message,
@@ -42,16 +40,15 @@ export default function ContactSection() {
       const res = axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
         formData
-      )
+      );
 
       handleSnackbarOpen("Successful", "success", 3000);
       // Reset form
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setMobile("");
-      setMessage("");
-      setService("");
+      // setName("");
+      // setEmail("");
+      // setMobile("");
+      // setMessage("");
+      // setService("");
     } catch (error) {
       console.log("Error submitting form:", error);
       handleSnackbarOpen("Failed", "error", 3000);
@@ -61,7 +58,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className={`md:py-28 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
+      className={`md:py-24 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
@@ -77,39 +74,21 @@ export default function ContactSection() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1">
                 <div>
                   <label
-                    htmlFor="firstName"
+                    htmlFor="Name"
                     className="block text-[15px] font-bold font-inter text-gray-700 mb-1"
                   >
-                    First Name
+                    Full Name
                   </label>
                   <input
                     type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="Enter First Name"
-                    className="bg-white w-full px-3 py-2 border border-primary text-gray-700 rounded-[8px] text-[16px] font-medium font-inter focus:outline-none"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="lastName"
-                    className="block text-[15px] font-bold font-inter text-gray-700 mb-1"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    placeholder="Enter Last Name"
+                    id="Name"
+                    name="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter Full Name"
                     className="bg-white w-full px-3 py-2 border border-primary text-gray-700 rounded-[8px] text-[16px] font-medium font-inter focus:outline-none"
                     required
                   />

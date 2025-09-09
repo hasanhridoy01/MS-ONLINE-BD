@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,9 +15,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import useHandleSnackbar from '@/lib/HandleSnakbar';
+import useHandleSnackbar from "@/lib/HandleSnakbar";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function LoginModal() {
+  const { login } = useContext(AuthContext);
   const handleSnackbarOpen = useHandleSnackbar();
   const [customerId, setCustomerId] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +39,7 @@ export default function LoginModal() {
 
       console.log("Login response:", res.data);
       handleSnackbarOpen("Successful", "success", 3000);
+      login(res.data);
     } catch (error) {
       console.error("Login error:", error);
       handleSnackbarOpen("Failed", "error", 3000);
@@ -47,7 +50,7 @@ export default function LoginModal() {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 hidden lg:block transition-colors rounded-[8px] font-inter">
+          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 transition-colors rounded-[8px] font-inter">
             LOGIN
           </button>
         </DialogTrigger>
@@ -89,9 +92,9 @@ export default function LoginModal() {
               </div>
             </div>
 
-            <DialogFooter className="mt-3">
+            <DialogFooter className="lg:mt-4 mt-5">
               <DialogClose asChild>
-                <Button variant="outline" className="rounded-[7px]">
+                <Button variant="outline" className="rounded-[7px] lg:mt-0 mt-3">
                   Cancel
                 </Button>
               </DialogClose>

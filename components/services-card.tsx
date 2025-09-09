@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 interface ServicesCardProps {
   icon: string;
   title: string;
+  type: string;
   description: string;
   link: string;
 }
@@ -13,11 +14,12 @@ export default function ServicesCard({
   title,
   description,
   link,
+  type,
 }: ServicesCardProps) {
   return (
     <div
       className={cn(
-        "rounded-[8px] p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border bg-primary/10 border-primary/10"
+        "rounded-[8px] p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border bg-primary/10 border-primary/70 relative"
       )}
     >
       <div className="w-16 h-16 mb-4 mx-auto">
@@ -33,8 +35,15 @@ export default function ServicesCard({
         />
       </div>
 
+      {/* type */}
+      <div className="absolute top-0 right-0 bg-primary text-white px-2 py-1 rounded-bl-[6px] rounded-tr-[8px] text-[12px] font-medium font-inter">
+        {type}
+      </div>
+
       <h4
-        className={cn("text-[18px] font-semibold font-inter mb-3 text-center text-primary")}
+        className={cn(
+          "text-[18px] font-semibold font-inter mb-3 text-center text-primary"
+        )}
       >
         {title}
       </h4>
@@ -45,7 +54,7 @@ export default function ServicesCard({
           : description}
       </p>
 
-      {link !== "#" && (
+      {link && link !== "#" ? (
         <a
           href={link}
           target={link.startsWith("http") ? "_blank" : "_self"}
@@ -56,6 +65,8 @@ export default function ServicesCard({
         >
           External Link <span>→</span>
         </a>
+      ) : (
+        <p className="text-sm text-neutral-400 italic float-right cursor-not-allowed">No link here</p>
       )}
     </div>
   );

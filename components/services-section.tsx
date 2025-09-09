@@ -69,6 +69,7 @@ export default function ServicesSection() {
             <ServicesCard
               key={item.id}
               icon={item.attachment}
+              type={item.type}
               title={item.title}
               description={item.description ? item.description.replace(/<[^>]*>/g, '') : 'No description available'}
               link={item.external_link || '#'}

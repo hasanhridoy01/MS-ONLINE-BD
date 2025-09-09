@@ -105,7 +105,9 @@ export default function Navbar() {
                 <ThemeSwitcher />
 
                 {/* Login Modal */}
-                <LoginModal />
+                <div className="hidden lg:block">
+                  <LoginModal />
+                </div>
 
                 {/* Mobile Hamburger */}
                 <button
@@ -136,6 +138,10 @@ export default function Navbar() {
                     </Link>
                   ))}
                 </nav>
+                {/* Login Modal */}
+                <div className="block lg:hidden mt-3">
+                  <LoginModal />
+                </div>
               </div>
             )}
           </div>

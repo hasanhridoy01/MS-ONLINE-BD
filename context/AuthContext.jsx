@@ -38,6 +38,7 @@ export default function AuthContextProvider({ children }) {
 
   // ✅ login expects full response { token, user }
   const login = (data) => {
+    console.log(data);
     dispatch({
       type: "LOGIN",
       payload: {

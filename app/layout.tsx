@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/lib/theme-provider";
 import Navbar from "@/components/navbar";
 import HeroSection from "@/components/hero-section";
 import AuthContextProvider from "@/context/AuthContext";
+import Footer from "@/components/footer";
+import LayoutWrapper from "@/components/layout-wrapper";
 
 const inter = Inter({
   variable: "--font-inter-sans",
@@ -47,13 +49,9 @@ export default function RootLayout({
         className={`${inter.variable} ${montserrat.variable} ${roboto.variable} ${kalam.variable}`}
       >
         <AuthContextProvider>
-        <ThemeProvider>
-          <div className="">
-            <Navbar />
-            <HeroSection />
-          </div>
-          {children}
-        </ThemeProvider>
+          <ThemeProvider>
+             <LayoutWrapper>{children}</LayoutWrapper>
+          </ThemeProvider>
         </AuthContextProvider>
       </body>
     </html>

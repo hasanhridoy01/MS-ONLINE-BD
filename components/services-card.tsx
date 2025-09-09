@@ -36,7 +36,7 @@ export default function ServicesCard({
       </div>
 
       {/* type */}
-      <div className="absolute top-0 right-0 bg-primary text-white px-2 py-1 rounded-bl-[6px] rounded-tr-[8px] text-[12px] font-medium font-inter">
+      <div className="absolute top-0 right-0 bg-primary text-white px-2 py-1 rounded-bl-[6px] rounded-tr-[6px] text-[12px] font-medium font-inter">
         {type}
       </div>
 

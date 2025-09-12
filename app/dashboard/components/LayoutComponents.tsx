@@ -22,13 +22,13 @@ const LayoutComponents = () => {
   return (
     <div className="flex relative">
       {/* Sidebar */}
-      <aside className="flex-col hidden shadow-md md:flex md:w-64 bg-base-100">
+      <aside className="flex-col hidden bg-primary/10 md:flex md:w-64 bg-base-100">
         <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
       </aside>
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden lg:my-0 my-10">
-        <main className="flex-1 p-4 pb-20 overflow-y-auto md:p-6 lg:p-8 md:pb-8">
+      <div className="flex flex-col flex-1 overflow-hidden lg:my-0 my-5">
+        <main className="flex-1 p-4 md:pb-10 pb-16 overflow-y-auto">
           {renderContent()}
         </main>
       </div>

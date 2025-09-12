@@ -57,7 +57,7 @@ export default function LayoutWrapper({
       {showButton && (
         <button
           onClick={scrollToTop}
-          className="h-[44px] w-[44px] rounded-[8px] fixed bottom-4 md:right-4 right-3 bg-primary/30 border border-primary text-primary-foreground transition-colors shadow-lg shadow-primary/40 flex items-center justify-center pt-1"
+          className="h-[44px] w-[44px] rounded-[8px] fixed bottom-4 md:right-4 right-3 bg-primary/30 border border-primary text-primary-foreground transition-colors shadow-lg shadow-primary/40 flex items-center justify-center pt-1 animate-soft-bounce"
         >
           <svg
             width="24"

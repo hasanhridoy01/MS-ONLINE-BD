@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import useHandleSnackbar from "@/lib/HandleSnakbar";
 import { AuthContext } from "@/context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginModal() {
   const { login } = useContext(AuthContext);
@@ -38,8 +39,8 @@ export default function LoginModal() {
       );
 
       console.log("Login response:", res.data);
-      handleSnackbarOpen("Successful", "success", 3000);
       login(res.data);
+      handleSnackbarOpen("Successful", "success", 3000);
     } catch (error) {
       console.error("Login error:", error);
       handleSnackbarOpen("Failed", "error", 3000);
@@ -87,19 +88,26 @@ export default function LoginModal() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-9 text-sm text-primary hover:underline"
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? (
+                    <Eye className="h-5 w-5" />
+                  ) : (
+                    <EyeOff className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </div>
 
             <DialogFooter className="lg:mt-4 mt-5">
               <DialogClose asChild>
-                <Button variant="outline" className="rounded-[7px] lg:mt-0 mt-3">
+                <Button
+                  variant="outline"
+                  className="rounded-[7px] lg:mt-0 mt-3"
+                >
                   Cancel
                 </Button>
               </DialogClose>
               <Button type="submit" className="rounded-[7px]">
-                Save changes
+                Login
               </Button>
             </DialogFooter>
           </form>

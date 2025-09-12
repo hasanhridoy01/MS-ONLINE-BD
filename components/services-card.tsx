@@ -19,10 +19,10 @@ export default function ServicesCard({
   return (
     <div
       className={cn(
-        "rounded-[8px] p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border bg-primary/10 border-primary/70 relative"
+        "rounded-[8px] p-5 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border bg-primary/10 border-primary/70 relative"
       )}
     >
-      <div className="w-16 h-16 mb-4 mx-auto">
+      <div className="w-14 h-14 mb-3 mx-auto">
         <img
           src={icon}
           alt={title}
@@ -36,7 +36,7 @@ export default function ServicesCard({
       </div>
 
       {/* type */}
-      <div className="absolute top-0 right-0 bg-primary text-white px-2 py-1 rounded-bl-[6px] rounded-tr-[6px] text-[12px] font-medium font-inter">
+      <div className="absolute top-2 right-2 bg-primary/20 text-primary px-2 py-1 rounded-[6px] text-[11px] font-medium font-inter">
         {type}
       </div>
 

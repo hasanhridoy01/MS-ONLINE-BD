@@ -166,9 +166,10 @@ export default function ContactSection() {
                 <div className="space-y-2">
                   <div className="flex items-center">
                     <input
-                      type="radio"
+                      type="checkbox"
                       id="newConnection"
                       name="service"
+                      color="primary"
                       value="New Connection"
                       checked={service === "New Connection"}
                       onChange={handleServiceChange}
@@ -183,9 +184,10 @@ export default function ContactSection() {
                   </div>
                   <div className="flex items-center">
                     <input
-                      type="radio"
+                      type="checkbox"
                       id="changeConnection"
                       name="service"
+                      color="primary"
                       value="Internet Connection"
                       checked={service === "Internet Connection"}
                       onChange={handleServiceChange}
@@ -200,9 +202,10 @@ export default function ContactSection() {
                   </div>
                   <div className="flex items-center">
                     <input
-                      type="radio"
+                      type="checkbox"
                       id="otherService"
                       name="service"
+                      color="primary"
                       value="Other"
                       checked={service === "Other"}
                       onChange={handleServiceChange}

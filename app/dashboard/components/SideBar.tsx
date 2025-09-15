@@ -1,6 +1,7 @@
 import React from "react";
-import { Home, Users, Settings, LogOut } from "lucide-react";
+import { Home, CreditCard, Receipt, LogOut, BluetoothConnected } from "lucide-react";
 import axios from "axios";
+import { AuthContext } from "@/context/AuthContext";
 
 interface SidebarProps {
   activeTab: string;
@@ -21,20 +22,26 @@ interface DataResponse {
 }
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
+  const { msonline_auth } = React.useContext<any>(AuthContext);
   const [profile, setProfile] = React.useState<Profile | null>(null);
   const [loading, setLoading] = React.useState(false);
 
   const menuItems = [
-    { id: "dashboard", label: "Home", icon: Home },
-    { id: "settings", label: "Settings", icon: Settings },
-    { id: "users", label: "Users", icon: Users },
+    { id: "connections", label: "Connections", icon: BluetoothConnected },
+    { id: "billing", label: "Billing", icon: Receipt },
+    { id: "payments", label: "Payments", icon: CreditCard },
   ];
 
   const getProfile = async () => {
     setLoading(true);
     try {
       const res = await axios.get<DataResponse>(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/profile`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${msonline_auth.token}`,
+          },
+        }
       );
       setProfile(res.data.data);
     } catch (error) {
@@ -56,9 +63,6 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           <h1 className="text-2xl font-bold text-primary/70 font-inter">
             DashBoard
           </h1>
-          <p className="mt-1 text-sm text-foreground font-medium font-inter">
-            Admin Panel
-          </p>
         </div>
 
         {/* Navigation (Scrollable) */}
@@ -84,18 +88,31 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
         {/* User Info & Logout (Sticky at Bottom) */}
         <div className="p-4 mt-auto border-t border-primary/20">
-          <div className="p-3 mb-3 border-2 border-primary/10 rounded-sm">
-            <p className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium font-inter">
-              {profile ? profile.name : "Loading..."}
-            </p>
-            <p className="text-xs text-muted-foreground hover:text-foreground transition-colors font-medium font-inter">
-              {profile ? profile.email : ""}
-            </p>
+          <div className="p-5 mb-4 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background shadow-sm hover:shadow-md transition-all duration-300">
+            <h3 className="text-lg font-semibold text-foreground mb-3">
+              👤 Profile Info
+            </h3>
+
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground font-medium">
+                <span className="text-foreground font-semibold">Name:</span>{" "}
+                {profile ? profile.name : "Loading..."}
+              </p>
+              <p className="text-sm text-muted-foreground font-medium">
+                <span className="text-foreground font-semibold">Email:</span>{" "}
+                {profile ? profile.email : ""}
+              </p>
+              <p className="text-sm text-muted-foreground font-medium">
+                <span className="text-foreground font-semibold">Mobile:</span>{" "}
+                {profile ? profile.mobile : ""}
+              </p>
+            </div>
           </div>
-          <button className="flex items-center w-full px-4 py-2 transition-colors duration-200 rounded-lg text-error hover:bg-error/10">
+
+          {/* <button className="flex items-center w-full px-4 py-2 transition-colors duration-200 rounded-lg text-error hover:bg-error/10">
             <LogOut className="w-4 h-4 mr-3" />
             Sign Out
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

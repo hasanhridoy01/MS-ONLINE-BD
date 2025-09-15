@@ -2,6 +2,7 @@
 
 import React, { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogClose,
@@ -20,11 +21,13 @@ import { AuthContext } from "@/context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginModal() {
+  const router = useRouter();
   const { login } = useContext(AuthContext);
   const handleSnackbarOpen = useHandleSnackbar();
   const [customerId, setCustomerId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,9 +40,12 @@ export default function LoginModal() {
           password: password,
         }
       );
-
-      console.log("Login response:", res.data);
       login(res.data);
+      setCustomerId("");
+      setPassword("");
+      // ✅ Close dialog after login success
+      setOpen(false);
+      router.push("/dashboard");
       handleSnackbarOpen("Successful", "success", 3000);
     } catch (error) {
       console.error("Login error:", error);
@@ -49,7 +55,7 @@ export default function LoginModal() {
 
   return (
     <div>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 transition-colors rounded-[8px] font-inter">
             LOGIN

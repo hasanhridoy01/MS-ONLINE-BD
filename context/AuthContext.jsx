@@ -7,8 +7,7 @@ export const AuthContext = createContext();
 
 const initialAuthState = {
   token: null,
-  refresh_token: null,
-  user: null, // 👈 store user details too
+  user: null,
   isAuthenticated: false,
 };
 
@@ -23,9 +22,14 @@ export default function AuthContextProvider({ children }) {
           if (!localData) return initialAuthState;
 
           const parsedData = JSON.parse(localData);
+
+          // ✅ Make sure no refreshToken is stored
+          const { token, user } = parsedData;
+
           return {
-            ...parsedData,
-            isAuthenticated: !!parsedData.token,
+            token: token ?? null,
+            user: user ?? null,
+            isAuthenticated: !!token,
           };
         } catch (error) {
           console.error("Failed to parse auth data:", error);
@@ -38,12 +42,11 @@ export default function AuthContextProvider({ children }) {
 
   // ✅ login expects full response { token, user }
   const login = (data) => {
-    console.log(data);
     dispatch({
       type: "LOGIN",
       payload: {
-        token: data.token,
-        user: data.user,
+        token: data.data.token,
+        user: data.data.user,
         isAuthenticated: true,
       },
     });

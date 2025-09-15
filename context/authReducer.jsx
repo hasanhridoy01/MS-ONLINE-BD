@@ -8,7 +8,7 @@ export default function authReducer(state, action) {
         isAuthenticated: true,
       };
     case "LOGOUT":
-      return action.payload; // reset to initialAuthState
+      return action.payload; 
     default:
       return state;
   }

@@ -3,21 +3,29 @@
 import React, { useState } from "react";
 import { Sidebar } from "./SideBar";
 import BottomNavigation from "./BottomNavigation";
+import { AuthContext } from "@/context/AuthContext";
+import Connection from "./Connection";
+import Billings from "./Billings";
 
 const LayoutComponents = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const { msonline_auth } = React.useContext<any>(AuthContext);
+  const [activeTab, setActiveTab] = useState("connections");
 
   // Extract content rendering into a function
   const renderContent = () => {
     switch (activeTab) {
-      case "profile":
-        return <p>Profile</p>;
-      case "settings":
-        return <p>Settings</p>;
+      case "payments":
+        return <p>payments</p>;
+      case "billing":
+        return <Billings />;
       default:
-        return <p>Dashboard</p>;
+        return <Connection />;
     }
   };
+
+  if (!msonline_auth?.token) {
+    return <p className="text-center py-10">Please Login</p>;
+  }
 
   return (
     <div className="flex relative">

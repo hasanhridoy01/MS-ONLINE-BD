@@ -44,11 +44,11 @@ export default function ContactSection() {
 
       handleSnackbarOpen("Successful", "success", 3000);
       // Reset form
-      // setName("");
-      // setEmail("");
-      // setMobile("");
-      // setMessage("");
-      // setService("");
+      setName("");
+      setEmail("");
+      setMobile("");
+      setMessage("");
+      setService("");
     } catch (error) {
       console.log("Error submitting form:", error);
       handleSnackbarOpen("Failed", "error", 3000);

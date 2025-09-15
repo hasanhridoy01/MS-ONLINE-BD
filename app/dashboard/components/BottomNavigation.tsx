@@ -1,5 +1,5 @@
 import React from "react";
-import { Home, Users, Settings, LogOut } from "lucide-react";
+import { Home, CreditCard, Receipt, LogOut, BluetoothConnected } from "lucide-react";
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -11,9 +11,9 @@ export function BottomNavigation({
   onTabChange,
 }: BottomNavigationProps) {
   const menuItems = [
-    { id: "dashboard", label: "Home", icon: Home },
-    { id: "settings", label: "Settings", icon: Settings },
-    { id: "users", label: "Users", icon: Users },
+    { id: "connections", label: "Connections", icon: BluetoothConnected },
+    { id: "billing", label: "Billing", icon: Receipt },
+    { id: "payments", label: "Payments", icon: CreditCard },
   ];
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-primary/10 rounded-sm md:hidden">

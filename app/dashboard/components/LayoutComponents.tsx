@@ -5,7 +5,8 @@ import { Sidebar } from "./SideBar";
 import BottomNavigation from "./BottomNavigation";
 import { AuthContext } from "@/context/AuthContext";
 import Connection from "./Connection";
-import Billings from "./Billings";
+import BillingsTable from "./BillingsTable";
+import PaymentTable from "./PaymentTable";
 
 const LayoutComponents = () => {
   const { msonline_auth } = React.useContext<any>(AuthContext);
@@ -14,10 +15,12 @@ const LayoutComponents = () => {
   // Extract content rendering into a function
   const renderContent = () => {
     switch (activeTab) {
-      case "payments":
-        return <p>payments</p>;
-      case "billing":
-        return <Billings />;
+      case "paymentsTable":
+        return <PaymentTable />;
+      case "billingTable":
+        return <BillingsTable />;
+      // case "billing":
+      //   return <Billings />;
       default:
         return <Connection />;
     }

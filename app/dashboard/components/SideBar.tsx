@@ -28,8 +28,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
   const menuItems = [
     { id: "connections", label: "Connections", icon: BluetoothConnected },
-    { id: "billing", label: "Billing", icon: Receipt },
-    { id: "payments", label: "Payments", icon: CreditCard },
+    // { id: "billing", label: "Billings", icon: Receipt },
+    { id: "billingTable", label: "Billing Table", icon: Receipt },
+    { id: "paymentsTable", label: "Payments Table", icon: CreditCard },
   ];
 
   const getProfile = async () => {
@@ -56,7 +57,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   }, []);
 
   return (
-    <div className="md:flex md:w-64 md:flex-col bg-base-100">
+    <div className="md:flex md:w-64 md:flex-col h-full">
       <div className="flex flex-col flex-1 h-full">
         {/* Logo */}
         <div className="p-5 border-b border-primary/20">

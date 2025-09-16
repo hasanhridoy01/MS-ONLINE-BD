@@ -9,58 +9,395 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/context/AuthContext";
+import axios from "axios";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const Billings = () => {
+// Add interface for props
+interface BillingsProps {
+  customerId: number;
+}
+
+interface Remark {
+  by: string;
+  previous_dues?: number;
+  package: number;
+  monthly_discount: number;
+  service_charge: number;
+  setup_charge: number;
+  initial_due: number;
+  cable_cost: number;
+  payable: number;
+}
+
+interface BillingItem {
+  month: string;
+  total: number;
+  dues: number;
+  paid: number;
+  remarks: Remark;
+  created_at: string;
+}
+
+interface ApiResponse {
+  status: boolean;
+  message: string;
+  data: {
+    from: number;
+    to: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    total: number;
+    data: BillingItem[];
+  };
+}
+
+interface PaymentItem {
+  id: number;
+  voucher: string;
+  month: string;
+  bills: number;
+  paid: number;
+  discount: number;
+  remarks: string | null;
+  payment_date: string;
+  payment_method: string;
+}
+
+interface ApiResponsePayment {
+  status: boolean;
+  message: string;
+  data: {
+    from: number;
+    to: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    total: number;
+    data: PaymentItem[];
+  };
+}
+
+const Billings: React.FC<BillingsProps> = ({ customerId }) => {
+  const { msonline_auth } = React.useContext<any>(AuthContext);
+  const [billings, setBillings] = React.useState<BillingItem[]>([]);
+  const [billingsLoading, setBillingsLoading] = React.useState<boolean>(false);
+  const [payments, setPayments] = React.useState<PaymentItem[]>([]);
+  const [paymentsLoading, setPaymentsLoading] = React.useState<boolean>(false);
+  const [currentPage, setCurrentPage] = React.useState<number>(1);
+  const [lastPage, setLastPage] = React.useState<number>(1);
+
+  // 🔹 Fetch bills for selected connection
+  const getBillings = async (customerId: number) => {
+    if (!customerId) return;
+    setBillingsLoading(true);
+    try {
+      const res = await axios.get<ApiResponse>(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerId}/bills`,
+        {
+          headers: {
+            Authorization: `Bearer ${msonline_auth.token}`,
+          },
+        }
+      );
+      setBillings(res.data.data.data);
+      setCurrentPage(res.data.data.current_page);
+      setLastPage(res.data.data.last_page);
+    } catch (error) {
+      console.error("Error fetching billings:", error);
+    } finally {
+      setBillingsLoading(false);
+    }
+  };
+
+  // 🔹 Fetch bills for selected connection
+    const getPayments = async (customerId: number) => {
+      if (!customerId) return;
+      setBillingsLoading(true);
+      try {
+        const res = await axios.get<ApiResponsePayment>(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerId}/payments`,
+          {
+            headers: {
+              Authorization: `Bearer ${msonline_auth.token}`,
+            },
+          }
+        );
+        setPayments(res.data.data.data);
+        setCurrentPage(res.data.data.current_page);
+        setLastPage(res.data.data.last_page);
+      } catch (error) {
+        console.error("Error fetching payment:", error);
+      } finally {
+        setBillingsLoading(false);
+      }
+    };
+
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < lastPage) setCurrentPage(currentPage + 1);
+  };
+
+  React.useEffect(() => {
+    getBillings(customerId);
+    getPayments(customerId);
+  }, [customerId]);
+
+  const renderBillingsContent = () => {
+    if (billingsLoading) {
+      return (
+        <Card>
+          <CardContent className="pt-4">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <Skeleton className="h-6 w-40" />
+                <Skeleton className="h-10 w-48" />
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {Array.from({ length: 6 }).map((_, idx) => (
+                      <TableHead key={idx}>
+                        <Skeleton className="h-4 w-24" />
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Array.from({ length: 5 }).map((_, idx) => (
+                    <TableRow key={idx}>
+                      {Array.from({ length: 6 }).map((_, cellIdx) => (
+                        <TableCell key={cellIdx}>
+                          <Skeleton className="h-4 w-full" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    return (
+      <Card>
+        <CardContent className="pt-4">
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Billing Table
+              </h4>
+            </div>
+
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Month</TableHead>
+                  <TableHead>Total</TableHead>
+                  <TableHead>Dues</TableHead>
+                  <TableHead>Paid</TableHead>
+                  <TableHead>Remarks By</TableHead>
+                  <TableHead>Created At</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {billings.length > 0 ? (
+                  billings.map((billing, idx) => (
+                    <TableRow key={idx}>
+                      <TableCell>{billing.month}</TableCell>
+                      <TableCell>${billing.total}</TableCell>
+                      <TableCell>{billing.dues}</TableCell>
+                      <TableCell>{billing.paid}</TableCell>
+                      <TableCell>{billing.remarks.by}</TableCell>
+                      <TableCell>{billing.created_at}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6}>No bills found</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            {/* Pagination */}
+            <div className="flex justify-end gap-2 mt-4">
+              <Button
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                variant="outline"
+              >
+                Previous
+              </Button>
+              <span className="flex items-center px-2">
+                Page {currentPage} of {lastPage}
+              </span>
+              <Button
+                onClick={handleNext}
+                disabled={currentPage === lastPage}
+                variant="outline"
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const renderPaymentsContent = () => {
+    if (paymentsLoading) {
+      return (
+        <Card>
+          <CardContent className="pt-4">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <Skeleton className="h-6 w-40" />
+                <Skeleton className="h-10 w-48" />
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {Array.from({ length: 8 }).map((_, idx) => (
+                      <TableHead key={idx}>
+                        <Skeleton className="h-4 w-24" />
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Array.from({ length: 5 }).map((_, idx) => (
+                    <TableRow key={idx}>
+                      {Array.from({ length: 8 }).map((_, cellIdx) => (
+                        <TableCell key={cellIdx}>
+                          <Skeleton className="h-4 w-full" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    return (
+      <Card>
+        <CardContent className="pt-4">
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-primary">
+                Payment Table
+              </h4>
+              
+            </div>
+
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Month</TableHead>
+                  <TableHead>Voucher</TableHead>
+                  <TableHead>Bills</TableHead>
+                  <TableHead>Paid</TableHead>
+                  <TableHead>Discount</TableHead>
+                  <TableHead>Remarks</TableHead>
+                  <TableHead>Payment Date</TableHead>
+                  <TableHead>Payment Method</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {payments.length > 0 ? (
+                  payments.map((payment) => (
+                    <TableRow key={payment.id}>
+                      <TableCell>{payment.month}</TableCell>
+                      <TableCell>{payment.voucher || "-"}</TableCell>
+                      <TableCell>{payment.bills}</TableCell>
+                      <TableCell>{payment.paid}</TableCell>
+                      <TableCell>{payment.discount}</TableCell>
+                      <TableCell>{payment.remarks || "-"}</TableCell>
+                      <TableCell>{payment.payment_date}</TableCell>
+                      <TableCell>{payment.payment_method}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8}>No payments found</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            {/* Pagination */}
+            <div className="flex justify-end gap-2 mt-4">
+              <Button
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                variant="outline"
+              >
+                Previous
+              </Button>
+              <span className="flex items-center px-2">
+                Page {currentPage} of {lastPage}
+              </span>
+              <Button
+                onClick={handleNext}
+                disabled={currentPage === lastPage}
+                variant="outline"
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="flex w-full flex-col gap-6">
       <Tabs defaultValue="billings">
         <TabsList>
-          <TabsTrigger value="billings">Billings</TabsTrigger>
+          <TabsTrigger value="billings">Billing</TabsTrigger>
           <TabsTrigger value="payment">Payment</TabsTrigger>
           <TabsTrigger value="statements">Statements</TabsTrigger>
         </TabsList>
+
         <TabsContent value="billings">
-          <Card>
-            <CardHeader>
-              <CardTitle>Billings</CardTitle>
-              <CardDescription>
-                Make changes to your billings here. Click save when you&apos;re
-                done.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6"></CardContent>
-            <CardFooter>
-              <Button>Save changes</Button>
-            </CardFooter>
-          </Card>
+          {renderBillingsContent()}
         </TabsContent>
+
         <TabsContent value="payment">
-          <Card>
-            <CardHeader>
-              <CardTitle>Payment</CardTitle>
-              <CardDescription>
-                Change your payment here. After saving, you&apos;ll be logged
-                out.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6"></CardContent>
-            <CardFooter>
-              <Button>Save payment</Button>
-            </CardFooter>
-          </Card>
+          {renderPaymentsContent()}
         </TabsContent>
+
         <TabsContent value="statements">
           <Card>
             <CardHeader>
-              <CardTitle>Statements</CardTitle>
+              <CardTitle>Statements for Customer #{customerId}</CardTitle>
               <CardDescription>
-                Download your statements here. After saving, you&apos;ll be
-                logged out.
+                View and download customer statements.
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-6"></CardContent>
+            <CardContent className="grid gap-6">
+              {/* Statements content here */}
+            </CardContent>
             <CardFooter>
-              <Button>Download statements</Button>
+              <Button>Download Statements</Button>
             </CardFooter>
           </Card>
         </TabsContent>

@@ -15,7 +15,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
+                  className="text-muted-foreground hover:text-foreground font-inter transition-colors text-[16px] font-medium"
                 >
                   Home
                 </Link>

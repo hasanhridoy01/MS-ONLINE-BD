@@ -48,7 +48,7 @@ export default function ServicesCard({
         {title}
       </h4>
 
-      <p className="text-[14px] text-neutral-600 leading-relaxed mb-4 text-justify min-h-[60px]">
+      <p className="text-[14px] leading-relaxed mb-4 text-justify min-h-[60px]">
         {description.length > 120
           ? `${description.substring(0, 120)}...`
           : description}
@@ -66,7 +66,7 @@ export default function ServicesCard({
           External Link <span>→</span>
         </a>
       ) : (
-        <p className="text-sm text-neutral-400 italic float-right cursor-not-allowed">No link here</p>
+        <p className="text-sm italic float-right cursor-not-allowed">No link here</p>
       )}
     </div>
   );

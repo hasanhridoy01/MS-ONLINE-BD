@@ -56,7 +56,7 @@ export default function PackageCard({
         </div>
       )}
 
-      <h3 className="text-lg font-semibold text-neutral-700 mb-2 font-inter flex items-center gap-2">
+      <h3 className="text-lg font-semibold mb-2 font-inter flex items-center gap-2">
         <svg
           width="24"
           height="24"
@@ -77,7 +77,7 @@ export default function PackageCard({
         <span className={`${styles.accent} font-normal text-[32px]`}>
           ৳ {price}
         </span>
-        <span className="text-sm text-gray-500"> /month</span>
+        <span className="text-sm"> /month</span>
       </div>
 
       <div className="bg-white rounded-[8px] p-4 mt-4 space-y-3 shadow-sm">

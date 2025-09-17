@@ -216,16 +216,6 @@
   --primary-border: rgba(96, 165, 250, 0.3);
 } */
 
-.orange-body-background-color {
-  background-color: #fffdfc;
-}
-.blue-body-background-color {
-  background-color: #fafdff;
-}
-.dark-body-background-color {
-  background-color: #fafdff;
-}
-
 @keyframes soft-bounce {
   0% {
     transform: translateY(0);

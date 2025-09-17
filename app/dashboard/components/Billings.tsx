@@ -20,10 +20,11 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 // Add interface for props
 interface BillingsProps {
-  customerId: number;
+  ConnectionId: number;
 }
 
 interface Remark {
@@ -87,22 +88,50 @@ interface ApiResponsePayment {
   };
 }
 
-const Billings: React.FC<BillingsProps> = ({ customerId }) => {
+export interface Package {
+  id: number;
+  name: string;
+  price: number;
+}
+
+export interface CustomerType {
+  id: number;
+  customerID: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  status: string;
+  package: Package;
+  bill: any | null;
+  extended_due_date: string;
+  // Add other customer fields as needed
+}
+
+export interface CustomerResponse {
+  status: boolean;
+  message: string;
+  data: CustomerType;
+}
+
+const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
   const { msonline_auth } = React.useContext<any>(AuthContext);
   const [billings, setBillings] = React.useState<BillingItem[]>([]);
   const [billingsLoading, setBillingsLoading] = React.useState<boolean>(false);
   const [payments, setPayments] = React.useState<PaymentItem[]>([]);
   const [paymentsLoading, setPaymentsLoading] = React.useState<boolean>(false);
+  const [customer, setCustomer] = React.useState<CustomerType | null>(null);
+  const [customerLoading, setCustomerLoading] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const [lastPage, setLastPage] = React.useState<number>(1);
 
   // 🔹 Fetch bills for selected connection
-  const getBillings = async (customerId: number) => {
-    if (!customerId) return;
+  const getBillings = async (ConnectionId: number) => {
+    if (!ConnectionId) return;
     setBillingsLoading(true);
     try {
       const res = await axios.get<ApiResponse>(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerId}/bills`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${ConnectionId}/bills`,
         {
           headers: {
             Authorization: `Bearer ${msonline_auth.token}`,
@@ -120,27 +149,45 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
   };
 
   // 🔹 Fetch bills for selected connection
-    const getPayments = async (customerId: number) => {
-      if (!customerId) return;
-      setBillingsLoading(true);
-      try {
-        const res = await axios.get<ApiResponsePayment>(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerId}/payments`,
-          {
-            headers: {
-              Authorization: `Bearer ${msonline_auth.token}`,
-            },
-          }
-        );
-        setPayments(res.data.data.data);
-        setCurrentPage(res.data.data.current_page);
-        setLastPage(res.data.data.last_page);
-      } catch (error) {
-        console.error("Error fetching payment:", error);
-      } finally {
-        setBillingsLoading(false);
-      }
-    };
+  const getPayments = async (ConnectionId: number) => {
+    if (!ConnectionId) return;
+    setBillingsLoading(true);
+    try {
+      const res = await axios.get<ApiResponsePayment>(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${ConnectionId}/payments`,
+        {
+          headers: {
+            Authorization: `Bearer ${msonline_auth.token}`,
+          },
+        }
+      );
+      setPayments(res.data.data.data);
+      setCurrentPage(res.data.data.current_page);
+      setLastPage(res.data.data.last_page);
+    } catch (error) {
+      console.error("Error fetching payment:", error);
+    } finally {
+      setBillingsLoading(false);
+    }
+  };
+
+  const getCustomer = async (ConnectionId: number) => {
+    setCustomerLoading(true);
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${ConnectionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${msonline_auth.token}`,
+          },
+        }
+      );
+      setCustomer(res.data.data);
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+    setCustomerLoading(false);
+  };
 
   const handlePrev = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -151,9 +198,10 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
   };
 
   React.useEffect(() => {
-    getBillings(customerId);
-    getPayments(customerId);
-  }, [customerId]);
+    getBillings(ConnectionId);
+    getPayments(ConnectionId);
+    getCustomer(ConnectionId);
+  }, [ConnectionId]);
 
   const renderBillingsContent = () => {
     if (billingsLoading) {
@@ -239,6 +287,7 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
                 onClick={handlePrev}
                 disabled={currentPage === 1}
                 variant="outline"
+                className="border border-primary/60"
               >
                 Previous
               </Button>
@@ -249,6 +298,7 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
                 onClick={handleNext}
                 disabled={currentPage === lastPage}
                 variant="outline"
+                className="border border-primary/60"
               >
                 Next
               </Button>
@@ -305,7 +355,6 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
               <h4 className="text-lg font-semibold text-primary">
                 Payment Table
               </h4>
-              
             </div>
 
             <Table>
@@ -348,6 +397,7 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
                 onClick={handlePrev}
                 disabled={currentPage === 1}
                 variant="outline"
+                className="border border-primary/60"
               >
                 Previous
               </Button>
@@ -358,6 +408,7 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
                 onClick={handleNext}
                 disabled={currentPage === lastPage}
                 variant="outline"
+                className="border border-primary/60"
               >
                 Next
               </Button>
@@ -368,27 +419,111 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
     );
   };
 
+  const renderCustomerDetails = () => {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Customer Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {customerLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-medium">Customer ID:</p>
+                  <p>{customer?.id}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Status:</p>
+                  <Badge
+                    variant={
+                      customer?.status === "Active" ? "default" : "destructive"
+                    }
+                  >
+                    {customer?.status}
+                  </Badge>
+                </div>
+              </div>
+
+              <div>
+                <p className="font-medium">Name:</p>
+                <p>{customer?.name}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-medium">Email:</p>
+                  <p>{customer?.email}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Phone:</p>
+                  <p>{customer?.phone}</p>
+                </div>
+              </div>
+
+              <div>
+                <p className="font-medium">Address:</p>
+                <p>{customer?.address}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-medium">Package:</p>
+                  <p>{customer?.package.name}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Price:</p>
+                  <p>৳{customer?.package.price}</p>
+                </div>
+              </div>
+
+              <div>
+                <p className="font-medium">Extended Due Date:</p>
+                <p>
+                  {customer?.extended_due_date
+                    ? new Date(customer.extended_due_date).toLocaleDateString()
+                    : "N/A"}
+                </p>
+              </div>
+
+              <div>
+                <p className="font-medium">Bill Status:</p>
+                <p>{customer?.bill ? "Available" : "No bill"}</p>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="flex w-full flex-col gap-6">
-      <Tabs defaultValue="billings">
+      <Tabs defaultValue="customer">
         <TabsList>
+          <TabsTrigger value="customer">Customer Details</TabsTrigger>
           <TabsTrigger value="billings">Billing</TabsTrigger>
           <TabsTrigger value="payment">Payment</TabsTrigger>
           <TabsTrigger value="statements">Statements</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="billings">
-          {renderBillingsContent()}
-        </TabsContent>
+        <TabsContent value="billings">{renderBillingsContent()}</TabsContent>
 
-        <TabsContent value="payment">
-          {renderPaymentsContent()}
-        </TabsContent>
+        <TabsContent value="payment">{renderPaymentsContent()}</TabsContent>
 
         <TabsContent value="statements">
           <Card>
             <CardHeader>
-              <CardTitle>Statements for Customer #{customerId}</CardTitle>
+              <CardTitle>Statements for Customer #{ConnectionId}</CardTitle>
               <CardDescription>
                 View and download customer statements.
               </CardDescription>
@@ -401,6 +536,8 @@ const Billings: React.FC<BillingsProps> = ({ customerId }) => {
             </CardFooter>
           </Card>
         </TabsContent>
+
+        <TabsContent value="customer">{renderCustomerDetails()}</TabsContent>
       </Tabs>
     </div>
   );

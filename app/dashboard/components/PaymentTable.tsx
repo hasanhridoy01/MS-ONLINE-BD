@@ -296,6 +296,7 @@ const PaymentTable = () => {
               onClick={handlePrev}
               disabled={currentPage === 1}
               variant="outline"
+              className="border border-primary/60"
             >
               Previous
             </Button>
@@ -306,6 +307,7 @@ const PaymentTable = () => {
               onClick={handleNext}
               disabled={currentPage === lastPage}
               variant="outline"
+              className="border border-primary/60"
             >
               Next
             </Button>

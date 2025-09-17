@@ -1,37 +1,61 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+# Dependencies
+/node_modules/
 /.pnp
 .pnp.js
+.yarn/
+.yarnrc.yml
+yarn.lock
+install-state.gz
 
-# testing
-/coverage
-/.bolt
-
-# next.js
+# Build outputs
 /.next/
 /out/
+/build/
+*.tsbuildinfo
 
-# production
-/build
+# Runtime data
+/.bolt/
 
-# misc
-.DS_Store
-*.pem
+# Testing
+/coverage/
 
-# debug
+# Environment variables
+.env
+.env*.local
+.env.production
+.env.development
+
+# Debug files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
 
-# local env files
-.env
-.env*.local
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.pem
 
-# vercel
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# TypeScript
+next-env.d.ts
+
+# Vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Optional - if you don't want to commit these
+/components.json
+postcss.config.js
+tailwind.config.ts

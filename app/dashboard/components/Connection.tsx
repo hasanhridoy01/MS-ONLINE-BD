@@ -56,9 +56,9 @@ const Connection = () => {
   const router = useRouter();
   const { msonline_auth } = React.useContext<any>(AuthContext);
   const [connections, setConnections] = React.useState<ConnectionType[]>([]);
-  const [customer, setCustomer] = React.useState<CustomerType | null>(null);
-  const [selectedCustomerId, setSelectedCustomerId] = React.useState<number | null>(null);
-  const [customerLoading, setCustomerLoading] = React.useState(false);
+  const [selectConnectionId, setSelectedConnectionId] = React.useState<
+    number | null
+  >(null);
   const [loading, setLoading] = React.useState(false);
   const [showBillings, setShowBillings] = React.useState(false);
 
@@ -81,34 +81,12 @@ const Connection = () => {
     }
   };
 
-  const getCustomer = async (customerID: number) => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${msonline_auth.token}`,
-          },
-        }
-      );
-      setCustomer(res.data.data);
-    } catch (error) {
-      console.error("Error fetching customer:", error);
-    }
-  };
-
-  const handleBackToConnections = () => {
-    setCustomer(null);
-    setShowBillings(false);
-    setSelectedCustomerId(null);
-  };
-
   const handleBackToCustomerDetails = () => {
     setShowBillings(false);
   };
 
-  const handleBillings = (customerId: number) => {
-    setSelectedCustomerId(customerId);
+  const handleBillings = (connectionId: number) => {
+    setSelectedConnectionId(connectionId);
     setShowBillings(true);
   };
 
@@ -117,134 +95,24 @@ const Connection = () => {
   }, []);
 
   // If showing billings, render Billings component
-  if (showBillings && selectedCustomerId) {
+  if (showBillings && selectConnectionId) {
     return (
-      <div className="p-2">
+      <div className="">
         <Button
           onClick={handleBackToCustomerDetails}
           variant="outline"
           className="mb-4"
         >
-          ← Back to Customer Details
+          ← Back to Customers
         </Button>
-        <Billings customerId={selectedCustomerId} />
-      </div>
-    );
-  }
-
-  // If customer data exists, show customer details
-  if (customer) {
-    return (
-      <div className="p-2">
-        <Button
-          onClick={handleBackToConnections}
-          variant="outline"
-          className="mb-4"
-        >
-          ← Back to Connections
-        </Button>
-
-        <Card className="shadow-sm border border-primary/30">
-          <CardHeader>
-            <CardTitle>Customer Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {customerLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-medium">Customer ID:</p>
-                    <p>{customer.customerID}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Status:</p>
-                    <Badge
-                      variant={
-                        customer?.status === "Active"
-                          ? "default"
-                          : "destructive"
-                      }
-                    >
-                      {customer?.status}
-                    </Badge>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-medium">Name:</p>
-                  <p>{customer.name}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-medium">Email:</p>
-                    <p>{customer.email}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Phone:</p>
-                    <p>{customer.phone}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-medium">Address:</p>
-                  <p>{customer.address}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-medium">Package:</p>
-                    <p>{customer?.package.name}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Price:</p>
-                    <p>৳{customer?.package.price}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-medium">Extended Due Date:</p>
-                  <p>
-                    {connections[0]?.extended_due_date
-                      ? new Date(
-                          connections[0].extended_due_date
-                        ).toLocaleDateString()
-                      : "N/A"}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="font-medium">Bill Status:</p>
-                  <p>{customer?.bill ? "Available" : "No bill"}</p>
-                </div>
-
-                <div className="flex justify-end">
-                  <Button
-                    onClick={() => handleBillings(customer.id)}
-                  >
-                    View Billings
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <Billings ConnectionId={selectConnectionId} />
       </div>
     );
   }
 
   // Otherwise, show connections list
   return (
-    <div className="p-2">
+    <div className="">
       <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
         {loading ? (
           Array.from({ length: 4 }).map((_, idx) => (
@@ -270,9 +138,9 @@ const Connection = () => {
         ) : (
           connections.map((conn) => (
             <Card
-              onClick={() => getCustomer(conn.id)}
+              onClick={() => handleBillings(conn.id)}
               key={conn.id}
-              className="shadow-sm hover:shadow-lg transition bg-primary/10 border border-primary/70 cursor-pointer"
+              className="shadow-sm hover:shadow-lg transition bg-primary/10 cursor-pointer"
             >
               <CardHeader>
                 <CardTitle className="flex justify-between items-center">

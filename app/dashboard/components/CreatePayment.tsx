@@ -264,11 +264,11 @@ export default function CreatePayment() {
                   variant="outline"
                   className="rounded-[7px] lg:mt-0 mt-3"
                 >
-                  Cancel
+                  CANCEL
                 </Button>
               </DialogClose>
               <Button type="submit" className="rounded-[7px]">
-                Create
+                CREATE
               </Button>
             </DialogFooter>
           </form>

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import ServicesCard from "./services-card";
 import { useTheme } from "@/lib/theme-provider";
 import axios from "axios";
+import ServicesCard from "@/components/services-card";
 
 interface ServiceItem {
   id: number;
@@ -19,7 +19,7 @@ interface ServiceCategory {
   items: ServiceItem[];
 }
 
-export default function ServicesSection() {
+export default function Services() {
   const { theme } = useTheme();
   const [services, setServices] = useState<ServiceCategory[]>([]);
 
@@ -28,7 +28,7 @@ export default function ServicesSection() {
     blue: "blue-body-background-color",
     dark: "dark-body-background-color",
   }[theme];
-
+  
   const getServices = async () => {
     try {
       const res = await axios.get(
@@ -47,7 +47,7 @@ export default function ServicesSection() {
   }, []);
 
   // Flatten all service items from all categories
-  const allServiceItems = services.flatMap((category) => category.items);
+  const allServiceItems = services.flatMap(category => category.items);
 
   return (
     <section
@@ -65,28 +65,16 @@ export default function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {allServiceItems.slice(0, 8).map((item) => (
+          {allServiceItems.map((item) => (
             <ServicesCard
               key={item.id}
               icon={item.attachment}
               type={item.type}
               title={item.title}
-              description={
-                item.description
-                  ? item.description.replace(/<[^>]*>/g, "")
-                  : "No description available"
-              }
-              link={item.external_link || "#"}
+              description={item.description ? item.description.replace(/<[^>]*>/g, '') : 'No description available'}
+              link={item.external_link || '#'}
             />
           ))}
-        </div>
-        <div className="mt-12 text-center">
-          <a
-            href="/services"
-            className="btn btn-primary text-primary underline font-inter"
-          >
-            View All Services
-          </a>
         </div>
       </div>
     </section>

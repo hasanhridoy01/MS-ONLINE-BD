@@ -48,7 +48,6 @@ export default function LayoutWrapper({
     <>
       <div>
         <Navbar />
-        {!isDashboard && !isPayment && <HeroSection />}
       </div>
 
       {children}

@@ -1,7 +1,7 @@
 "use client";
 
+import PackageCard from "@/components/package-card";
 import { useTheme } from "@/lib/theme-provider";
-import PackageCard from "./package-card";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -43,7 +43,7 @@ interface Package {
   reseller_commission: number;
 }
 
-export default function PackagesSection() {
+export default function Packages() {
   const { theme } = useTheme();
   const [deals, setDeals] = useState<Deal[]>([]);
 
@@ -70,7 +70,7 @@ export default function PackagesSection() {
 
   // Extract features from attributes
   const getFeatures = (attributes: Attribute[]): string[] => {
-    return attributes.map((attr) => `${attr.label}: ${attr.value}`);
+    return attributes.map(attr => `${attr.label}: ${attr.value}`);
   };
 
   // Parse speed from string to number
@@ -97,29 +97,18 @@ export default function PackagesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {deals.map((deal) =>
-            deal.items
-              .slice(0, 4)
-              .map((item) => (
-                <PackageCard
-                  key={item.id}
-                  title={item.title}
-                  price={item.package.price}
-                  speed={parseSpeed(item.package.speed)}
-                  features={getFeatures(item.attributes)}
-                  popular={false}
-                  color="silver"
-                />
-              ))
+            deal.items.map((item) => (
+              <PackageCard
+                key={item.id}
+                title={item.title}
+                price={item.package.price}
+                speed={parseSpeed(item.package.speed)}
+                features={getFeatures(item.attributes)}
+                popular={false} 
+                color="silver" 
+              />
+            ))
           )}
-        </div>
-
-        <div className="mt-12 text-center">
-          <a
-            href="/packages"
-            className="btn btn-primary text-primary underline font-inter"
-          >
-            View All Packages
-          </a>
         </div>
       </div>
     </section>

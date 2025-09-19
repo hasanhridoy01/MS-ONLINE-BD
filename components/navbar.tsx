@@ -10,9 +10,9 @@ import LoginModal from "./login-modal";
 const navLinks = [
   { name: "Home", path: "/" },
   { name: "Packages", path: "/packages" },
-  { name: "Our Pop", path: "/pop" },
-  { name: "Pay Bill", path: "/bill" },
-  { name: "Our Service", path: "/service" },
+  // { name: "Our Pop", path: "/pop" },
+  { name: "Pay Bill", path: "/dashboard" },
+  { name: "Our Service", path: "/services" },
   { name: "About Us", path: "/about" },
   { name: "Contact", path: "/contact" },
   { name: "Offer", path: "/offer" },

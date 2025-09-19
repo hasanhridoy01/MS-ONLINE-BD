@@ -14,6 +14,7 @@ export default function LayoutWrapper({
 }) {
   const pathname = usePathname();
   const isDashboard = pathname.startsWith("/dashboard");
+  const isPayment = pathname.startsWith("/payment");
 
   // State for showing the button
   const [showButton, setShowButton] = useState(false);
@@ -47,7 +48,7 @@ export default function LayoutWrapper({
     <>
       <div>
         <Navbar />
-        {!isDashboard && <HeroSection />}
+        {!isDashboard && !isPayment && <HeroSection />}
       </div>
 
       {children}

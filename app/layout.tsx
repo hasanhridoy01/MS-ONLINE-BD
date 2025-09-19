@@ -7,6 +7,8 @@ import HeroSection from "@/components/hero-section";
 import AuthContextProvider from "@/context/AuthContext";
 import Footer from "@/components/footer";
 import LayoutWrapper from "@/components/layout-wrapper";
+import { SnackbarProvider } from "notistack";
+import { Providers } from "@/components/providers";
 
 const inter = Inter({
   variable: "--font-inter-sans",
@@ -44,15 +46,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+     <html lang="en">
       <body
         className={`${inter.variable} ${montserrat.variable} ${roboto.variable} ${kalam.variable}`}
       >
-        <AuthContextProvider>
-          <ThemeProvider>
-             <LayoutWrapper>{children}</LayoutWrapper>
-          </ThemeProvider>
-        </AuthContextProvider>
+        <Providers> {/* Use the client provider here */}
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </Providers>
       </body>
     </html>
   );

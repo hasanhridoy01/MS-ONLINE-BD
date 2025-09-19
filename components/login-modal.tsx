@@ -46,7 +46,7 @@ export default function LoginModal() {
       // ✅ Close dialog after login success
       setOpen(false);
       router.push("/dashboard");
-      handleSnackbarOpen("Successful", "success", 3000);
+      handleSnackbarOpen("Login Successful", "success", 3000);
     } catch (error) {
       console.error("Login error:", error);
       handleSnackbarOpen("Failed", "error", 3000);

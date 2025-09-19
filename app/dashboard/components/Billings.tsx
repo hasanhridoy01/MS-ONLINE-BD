@@ -182,6 +182,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
           },
         }
       );
+
       setCustomer(res.data.data);
     } catch (error) {
       console.error("Error fetching customer:", error);

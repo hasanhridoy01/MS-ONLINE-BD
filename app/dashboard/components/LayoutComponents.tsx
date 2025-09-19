@@ -39,7 +39,7 @@ const LayoutComponents = () => {
 
       {/* Main Content */}
       <div className="flex flex-col flex-1 overflow-hidden lg:my-0 my-5">
-        <main className="flex-1 p-4 pt-0 pb-0 overflow-y-auto">
+        <main className="flex-1 p-4 pt-0 pb-0 pr-0 overflow-y-auto">
           {renderContent()}
         </main>
       </div>

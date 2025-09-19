@@ -20,6 +20,7 @@ import { ChevronDown } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import CreatePayment from "./CreatePayment";
 
 interface Remark {
   by: string;
@@ -217,10 +218,11 @@ const PaymentTable = () => {
             <h4 className="text-lg font-semibold text-primary">
               Payment Table
             </h4>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="
+            <div className="flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="
                 inline-flex items-center justify-between
                 w-48 px-3 py-2
                 bg-white border border-primary/60 rounded-md
@@ -228,28 +230,31 @@ const PaymentTable = () => {
                 hover:bg-gray-50
                 focus:outline-none focus:ring-2 focus:ring-indigo-500
               "
-                >
-                  {selectedConnection
-                    ? selectedConnection.package.name
-                    : "Select Connection"}
-                  <ChevronDown className="ml-2 h-4 w-4 text-primary" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {connectionLoading ? (
-                  <DropdownMenuItem disabled>Loading...</DropdownMenuItem>
-                ) : (
-                  connections.map((connection) => (
-                    <DropdownMenuItem
-                      key={connection.id}
-                      onClick={() => setSelectedConnection(connection)}
-                    >
-                      {connection.package.name}
-                    </DropdownMenuItem>
-                  ))
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  >
+                    {selectedConnection
+                      ? selectedConnection.package.name
+                      : "Select Connection"}
+                    <ChevronDown className="ml-2 h-4 w-4 text-primary" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {connectionLoading ? (
+                    <DropdownMenuItem disabled>Loading...</DropdownMenuItem>
+                  ) : (
+                    connections.map((connection) => (
+                      <DropdownMenuItem
+                        key={connection.id}
+                        onClick={() => setSelectedConnection(connection)}
+                      >
+                        {connection.package.name} 
+                      </DropdownMenuItem>
+                    ))
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <CreatePayment />
+            </div>
           </div>
 
           <Table>

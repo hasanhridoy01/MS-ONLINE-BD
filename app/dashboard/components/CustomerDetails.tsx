@@ -1,157 +1,202 @@
-"use client";
+// components/PaymentStatus.tsx
+'use client';
 
-import React from "react";
-import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import React, { useEffect, useState, useContext } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { AuthContext } from "@/context/AuthContext";
 
-export interface Package {
-  id: number;
-  name: string;
-  price: number;
+interface PaymentData {
+  status: string | null;
+  id: string | null;
+  uuid: string | null;
+  paymentID: string | null;
 }
 
-export interface CustomerType {
-  id: number;
-  customerID: string;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  status: string;
-  package: Package;
-  bill: any | null;
-  extended_due_date: string;
-  // Add other customer fields as needed
-}
+const PaymentStatus = () => {
+  const { msonline_auth } = useContext(AuthContext);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [paymentData, setPaymentData] = useState<PaymentData>({
+    status: null,
+    id: null,
+    uuid: null,
+    paymentID: null
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [contactEmail, setContactEmail] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-export interface CustomerResponse {
-  status: boolean;
-  message: string;
-  data: CustomerType;
-}
-
-const CustomerDetails = () => {
-  const { msonline_auth } = React.useContext<any>(AuthContext);
-  const [customer, setCustomer] = React.useState<CustomerType | null>(null);
-  const [selectedCustomerId, setSelectedCustomerId] = React.useState<
-    number | null
-  >(null);
-  const [customerLoading, setCustomerLoading] = React.useState(false);
-
-  const getCustomer = async (customerID: number) => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customerID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${msonline_auth.token}`,
-          },
-        }
-      );
-      setCustomer(res.data.data);
-    } catch (error) {
-      console.error("Error fetching customer:", error);
+  useEffect(() => {
+    // Check if user is authenticated
+    if (!msonline_auth?.token) {
+      router.push("/"); 
+      return;
     }
+
+    // Extract query parameters
+    const status = searchParams.get('status');
+    const id = searchParams.get('id');
+    const uuid = searchParams.get('uuid');
+    const paymentID = searchParams.get('paymentID');
+
+    setPaymentData({
+      status,
+      id,
+      uuid,
+      paymentID
+    });
+    
+    setIsLoading(false);
+  }, [msonline_auth, router, searchParams]);
+
+  const handleContactSupport = () => {
+    // Handle contact support logic here
+    console.log("Contact support with email:", contactEmail);
+    setIsDialogOpen(false);
+    setContactEmail("");
   };
-  // If customer data exists, show customer details
-  if (customer) {
+
+  // Show nothing while checking authentication or redirecting
+  if (!msonline_auth?.token) {
     return (
-      <div className="p-2">
-        <Card className="shadow-sm border border-primary/30">
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Customer Details</CardTitle>
+            <CardTitle className="text-center">Verifying Access</CardTitle>
+            <CardDescription className="text-center">
+              Please wait while we verify your access...
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            {customerLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-medium">Customer ID:</p>
-                    <p>{customer.customerID}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Status:</p>
-                    <Badge
-                      variant={
-                        customer?.status === "Active"
-                          ? "default"
-                          : "destructive"
-                      }
-                    >
-                      {customer?.status}
-                    </Badge>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-medium">Name:</p>
-                  <p>{customer.name}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-medium">Email:</p>
-                    <p>{customer.email}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Phone:</p>
-                    <p>{customer.phone}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-medium">Address:</p>
-                  <p>{customer.address}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-medium">Package:</p>
-                    <p>{customer?.package.name}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Price:</p>
-                    <p>৳{customer?.package.price}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-medium">Extended Due Date:</p>
-                  <p>
-                    {customer?.extended_due_date
-                      ? new Date(
-                          customer.extended_due_date
-                        ).toLocaleDateString()
-                      : "N/A"}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="font-medium">Bill Status:</p>
-                  <p>{customer?.bill ? "Available" : "No bill"}</p>
-                </div>
-
-               
-              </div>
-            )}
+          <CardContent className="flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </CardContent>
         </Card>
       </div>
     );
   }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-center">Processing Payment</CardTitle>
+            <CardDescription className="text-center">
+              Verifying your payment details...
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const getStatusConfig = () => {
+    switch (paymentData.status) {
+      case 'success':
+        return {
+          title: 'Payment Successful',
+          description: 'Your payment has been processed successfully.',
+          icon: (
+            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+              <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+          ),
+          badge: <Badge className="bg-green-100 text-green-800">Success</Badge>,
+          color: 'text-green-600'
+        };
+      case 'failed':
+        return {
+          title: 'Payment Failed',
+          description: 'We couldn\'t process your payment. Please try again.',
+          icon: (
+            <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
+              <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </div>
+          ),
+          badge: <Badge className="bg-red-100 text-red-800">Failed</Badge>,
+          color: 'text-red-600'
+        };
+      default:
+        return {
+          title: 'Payment Processing',
+          description: 'Your payment is being processed. This may take a few moments.',
+          icon: (
+            <div className="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center">
+              <svg className="w-10 h-10 text-yellow-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+          ),
+          badge: <Badge className="bg-yellow-100 text-yellow-800">Processing</Badge>,
+          color: 'text-yellow-600'
+        };
+    }
+  };
+
+  const statusConfig = getStatusConfig();
+
+  return (
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 lg:mt-44 mt-52">
+      <div className="max-w-md mx-auto shadow-xl">
+        <Card className="px-3">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              {statusConfig.icon}
+            </div>
+            <CardTitle>{statusConfig.title}</CardTitle>
+            <CardDescription>{statusConfig.description}</CardDescription>
+          </CardHeader>
+          
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center py-2 border-b">
+                <span className="text-muted-foreground">Status:</span>
+                {statusConfig.badge}
+              </div>
+              
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-muted-foreground">Reference ID:</span>
+                <span className="font-medium">{paymentData.id || 'N/A'}</span>
+              </div>
+              
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-muted-foreground">UUID:</span>
+                <span className="font-medium">{paymentData.uuid || 'N/A'}</span>
+              </div>
+              
+              <div className="flex justify-between py-2 border-b">
+                <span className="text-muted-foreground">Payment ID:</span>
+                <span className="font-medium">{paymentData.paymentID || 'N/A'}</span>
+              </div>
+            </div>
+          </CardContent>
+          
+          <CardFooter className="flex flex-col gap-3 px-4">
+            {paymentData.status === 'failed' ? (
+              <Button asChild className="w-full">
+                <Link href="/dashboard">Try Payment Again</Link>
+              </Button>
+            ) : (
+              <Button asChild className="w-full">
+                <Link href="/dashboard">Go to Dashboard</Link>
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
 };
 
-export default CustomerDetails;
+export default PaymentStatus;

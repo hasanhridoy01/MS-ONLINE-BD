@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import PaymentProcessing from "./PaymentProcessing";
 
 export interface DealType {
   id: number;
@@ -66,6 +67,8 @@ export default function CreatePayment() {
   const [connections, setConnections] = useState<ConnectionType[]>([]);
   const [connectionLoading, setConnectionLoading] = useState(false);
   const [selectedConnectionId, setSelectedConnectionId] = useState<string>("");
+  const [processing, setProcessing] = useState(false);
+  const [paymentURL, setPaymentURL] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,7 +104,9 @@ export default function CreatePayment() {
 
         // Redirect to payment URL or show success
         if (res.data.data.paymentURL) {
-          window.location.href = res.data.data.paymentURL;
+          // Show processing animation
+          setProcessing(true);
+          setPaymentURL(res.data.data.paymentURL);
         } else {
           router.push("/dashboard");
         }
@@ -165,8 +170,8 @@ export default function CreatePayment() {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 transition-colors rounded-[8px] font-inter">
-            Create Payment
+          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 transition-colors rounded-[6px] font-inter text-sm">
+            CREATE PAYMENT
           </button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -202,7 +207,7 @@ export default function CreatePayment() {
                             key={connection.id}
                             value={connection.id.toString()}
                           >
-                            {connection.id}
+                            {connection.customerID}
                           </SelectItem>
                         ))
                       )}
@@ -269,6 +274,9 @@ export default function CreatePayment() {
           </form>
         </DialogContent>
       </Dialog>
+      {processing && paymentURL && (
+        <PaymentProcessing paymentURL={paymentURL} />
+      )}
     </div>
   );
 }

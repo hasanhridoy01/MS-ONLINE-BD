@@ -1,7 +1,15 @@
 import React from "react";
-import { Home, CreditCard, Receipt, LogOut, BluetoothConnected } from "lucide-react";
+import {
+  Home,
+  CreditCard,
+  Receipt,
+  LogOut,
+  BluetoothConnected,
+  Plus,
+} from "lucide-react";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
+import CreatePayment from "./CreatePayment";
 
 interface SidebarProps {
   activeTab: string;
@@ -89,6 +97,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
         {/* User Info & Logout (Sticky at Bottom) */}
         <div className="p-4 mt-auto border-t border-primary/20">
+          <div className="w-full my-3 flex justify-center">
+            <CreatePayment />
+          </div>
           <div className="p-5 mb-4 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background shadow-sm hover:shadow-md transition-all duration-300">
             <h3 className="text-lg font-semibold text-foreground mb-3">
               👤 Profile Info

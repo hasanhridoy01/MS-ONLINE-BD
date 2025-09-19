@@ -98,13 +98,13 @@ const Connection = () => {
   if (showBillings && selectConnectionId) {
     return (
       <div className="">
-        <Button
+        {/* <Button
           onClick={handleBackToCustomerDetails}
           variant="outline"
           className="mb-4"
         >
           ← Back to Customers
-        </Button>
+        </Button> */}
         <Billings ConnectionId={selectConnectionId} />
       </div>
     );

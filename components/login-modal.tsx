@@ -57,7 +57,7 @@ export default function LoginModal() {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 transition-colors rounded-[8px] font-inter">
+          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 transition-colors rounded-[6px] font-inter text-sm">
             LOGIN
           </button>
         </DialogTrigger>

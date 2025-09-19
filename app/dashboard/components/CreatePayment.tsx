@@ -78,6 +78,11 @@ export default function CreatePayment() {
       return;
     }
 
+    if (!selectedConnectionId) {
+      handleSnackbarOpen("Please select a connection", "error", 3000);
+      return;
+    }
+
     try {
       const formData = {
         customer_id: selectedConnectionId,

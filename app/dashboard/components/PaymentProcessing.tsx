@@ -30,9 +30,9 @@ const PaymentProcessing: React.FC<PaymentProcessingProps> = ({
   }, [paymentURL]);
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-50">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm z-50">
       <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-      <p className="mt-4 text-base font-medium text-primary/70">{message}</p>
+      <p className="mt-4 text-base font-medium text-white">{message}</p>
     </div>
   );
 };

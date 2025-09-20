@@ -190,7 +190,7 @@ export default function CreatePayment() {
 
             <div className="grid gap-4">
               <div className="grid gap-3">
-                <Label htmlFor="customer-id">Customer ID</Label>
+                <Label htmlFor="customer-id">Customer Name</Label>
                 <Select
                   value={selectedConnectionId}
                   onValueChange={setSelectedConnectionId} // Update selected deal ID
@@ -259,6 +259,7 @@ export default function CreatePayment() {
                   id="amount-id"
                   name="amount"
                   type="number"
+                  placeholder="Amount"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   required
@@ -271,11 +272,12 @@ export default function CreatePayment() {
                 <Button
                   variant="outline"
                   className="rounded-[7px] lg:mt-0 mt-3"
+                  size={"sm"}
                 >
                   CANCEL
                 </Button>
               </DialogClose>
-              <Button type="submit" className="rounded-[7px]">
+              <Button type="submit" className="rounded-[7px]" size={"sm"}>
                 CREATE
               </Button>
             </DialogFooter>

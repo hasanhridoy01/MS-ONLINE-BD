@@ -11,7 +11,7 @@ interface Deal {
 }
 
 interface PackageItem {
-  id: number;
+  id: string;
   title: string;
   attributes: Attribute[];
   deal_type: string;
@@ -100,6 +100,7 @@ export default function Packages() {
             deal.items.map((item) => (
               <PackageCard
                 key={item.id}
+                id={item.id}
                 title={item.title}
                 price={item.package.price}
                 speed={parseSpeed(item.package.speed)}

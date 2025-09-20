@@ -72,11 +72,12 @@ export default function LoginModal() {
 
             <div className="grid gap-4">
               <div className="grid gap-3">
-                <Label htmlFor="customer-id">Customer ID</Label>
+                <Label htmlFor="customer-id">Customer Name</Label>
                 <Input
                   id="customer-id"
                   name="customer_id"
                   value={customerId}
+                  placeholder="Customer Name"
                   onChange={(e) => setCustomerId(e.target.value)}
                 />
               </div>
@@ -85,6 +86,7 @@ export default function LoginModal() {
                 <Input
                   id="password"
                   name="password"
+                  placeholder="Password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -108,11 +110,12 @@ export default function LoginModal() {
                 <Button
                   variant="outline"
                   className="rounded-[7px] lg:mt-0 mt-3"
+                  size={"sm"}
                 >
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" className="rounded-[7px]">
+              <Button type="submit" className="rounded-[7px]" size={"sm"}>
                 Login
               </Button>
             </DialogFooter>

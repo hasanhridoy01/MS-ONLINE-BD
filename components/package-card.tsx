@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
+import Application from "./Application";
 
 interface PackageCardProps {
+  id: string;
   title: string;
   price: number;
   speed: number;
@@ -33,6 +35,7 @@ const colorVariants = {
 };
 
 export default function PackageCard({
+  id,
   title,
   price,
   speed,
@@ -103,14 +106,7 @@ export default function PackageCard({
         ))}
       </div>
 
-      <button
-        className={cn(
-          "mt-4 w-full py-2 text-[16px] font-inter font-semibold rounded-[8px] transition-all",
-          styles.button
-        )}
-      >
-        Buy Package
-      </button>
+      <Application id={id} />
     </div>
   );
 }

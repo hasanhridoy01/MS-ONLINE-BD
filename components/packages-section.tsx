@@ -11,7 +11,7 @@ interface Deal {
 }
 
 interface PackageItem {
-  id: number;
+  id: string;
   title: string;
   attributes: Attribute[];
   deal_type: string;

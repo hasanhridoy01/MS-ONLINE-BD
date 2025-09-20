@@ -109,7 +109,6 @@ export default function CreatePayment() {
 
         // Redirect to payment URL or show success
         if (res.data.data.paymentURL) {
-          // Show processing animation
           setProcessing(true);
           setPaymentURL(res.data.data.paymentURL);
         } else {
@@ -175,7 +174,7 @@ export default function CreatePayment() {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 transition-colors rounded-[6px] font-inter text-sm">
+          <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 transition-colors rounded-[6px] font-inter lg:text-sm text-xs">
             CREATE PAYMENT
           </button>
         </DialogTrigger>
@@ -196,7 +195,9 @@ export default function CreatePayment() {
                   value={selectedConnectionId}
                   onValueChange={setSelectedConnectionId} // Update selected deal ID
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger
+                    className={`w-full border border-primary bg-background px-3 py-2 rounded-[7px] focus:outline-none focus:ring-0 focus:border-primary`}
+                  >
                     <SelectValue placeholder="Select payment gateway" />
                   </SelectTrigger>
                   <SelectContent>
@@ -228,7 +229,9 @@ export default function CreatePayment() {
                   value={selectedDealId}
                   onValueChange={setSelectedDealId} // Update selected deal ID
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger
+                    className={`w-full border border-primary bg-background px-3 py-2 rounded-[7px] focus:outline-none focus:ring-0 focus:border-primary`}
+                  >
                     <SelectValue placeholder="Select payment gateway" />
                   </SelectTrigger>
                   <SelectContent>

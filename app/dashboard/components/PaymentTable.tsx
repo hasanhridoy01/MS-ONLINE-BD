@@ -215,16 +215,16 @@ const PaymentTable = () => {
       <CardContent className="pt-4">
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-lg font-semibold text-primary">
+            <h4 className="lg:text-lg text-sm font-semibold text-primary">
               Payment Table
             </h4>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 lg:flex-row flex-col">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
                     className="
                 inline-flex items-center justify-between
-                w-48 px-3 py-2
+               lg:w-48 w-24 px-3 py-2
                 bg-white border border-primary/60 rounded-md
                 shadow-sm text-sm font-medium text-primary
                 hover:bg-gray-50
@@ -246,7 +246,7 @@ const PaymentTable = () => {
                         key={connection.id}
                         onClick={() => setSelectedConnection(connection)}
                       >
-                        {connection.package.name} 
+                        {connection.package.name}
                       </DropdownMenuItem>
                     ))
                   )}
@@ -302,10 +302,11 @@ const PaymentTable = () => {
               disabled={currentPage === 1}
               variant="outline"
               className="border border-primary/60"
+              size={"sm"}
             >
               Previous
             </Button>
-            <span className="flex items-center px-2">
+            <span className="flex items-center px-2 lg:text-sm text-xs">
               Page {currentPage} of {lastPage}
             </span>
             <Button
@@ -313,6 +314,7 @@ const PaymentTable = () => {
               disabled={currentPage === lastPage}
               variant="outline"
               className="border border-primary/60"
+              size={"sm"}
             >
               Next
             </Button>

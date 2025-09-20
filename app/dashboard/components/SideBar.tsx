@@ -69,7 +69,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
       <div className="flex flex-col flex-1 h-full">
         {/* Logo */}
         <div className="p-5 border-b border-primary/20">
-          <h1 className="text-2xl font-bold text-primary/70 font-inter">
+          <h1 className="text-2xl font-bold text-primary/70 font-kalam text-center">
             DashBoard
           </h1>
         </div>

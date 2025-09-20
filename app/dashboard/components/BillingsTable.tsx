@@ -199,7 +199,7 @@ const BillingsTable = () => {
       <CardContent className="pt-4">
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-lg font-semibold text-primary">
+            <h4 className="lg:text-lg text-sm font-semibold text-primary">
               Billing Table
             </h4>
             <DropdownMenu>
@@ -207,9 +207,9 @@ const BillingsTable = () => {
                 <button
                   className="
                 inline-flex items-center justify-between
-                w-48 px-3 py-2
+                lg:w-48 w-24 px-3 py-2
                 bg-white border border-primary/60 rounded-md
-                shadow-sm text-sm font-medium text-primary
+                shadow-sm lg:text-sm text-xs font-medium text-primary
                 hover:bg-gray-50
                 focus:outline-none focus:ring-2 focus:ring-indigo-500
               "
@@ -257,7 +257,7 @@ const BillingsTable = () => {
                 billings.map((billing, idx) => (
                   <TableRow key={idx}>
                     <TableCell>{billing.month}</TableCell>
-                    <TableCell>${billing.total}</TableCell>
+                    <TableCell>{billing.total}</TableCell>
                     <TableCell>{billing.dues}</TableCell>
                     <TableCell>{billing.paid}</TableCell>
                     <TableCell>{billing.remarks.by}</TableCell>
@@ -266,7 +266,9 @@ const BillingsTable = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6}>No bills found</TableCell>
+                  <TableCell colSpan={6} align="center">
+                    No bills found
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -277,11 +279,12 @@ const BillingsTable = () => {
               onClick={handlePrev}
               disabled={currentPage === 1}
               variant="outline"
-               className="border border-primary/60"
+              className="border border-primary/60"
+              size={"sm"}
             >
               Previous
             </Button>
-            <span className="flex items-center px-2">
+            <span className="flex items-center px-2 lg:text-sm text-xs">
               Page {currentPage} of {lastPage}
             </span>
             <Button
@@ -289,6 +292,7 @@ const BillingsTable = () => {
               disabled={currentPage === lastPage}
               variant="outline"
               className="border border-primary/60"
+              size={"sm"}
             >
               Next
             </Button>

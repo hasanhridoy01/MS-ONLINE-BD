@@ -64,6 +64,7 @@ const PaymentStatus = () => {
 
     // Extract payment ID from query parameters
     const id = searchParams.get("id");
+    const uuid = searchParams.get("uuid");
 
     if (!id) {
       setError("Payment ID is missing");
@@ -73,9 +74,10 @@ const PaymentStatus = () => {
 
     // Fetch payment data from API using the ID from search params
     const fetchPaymentData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get<ApiResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/payment/${id}/verify`,
           {
             headers: {
               Authorization: `Bearer ${msonline_auth.token}`,
@@ -135,7 +137,7 @@ const PaymentStatus = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-background lg:px-0 px-4">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-center">Processing Payment</CardTitle>
@@ -155,7 +157,7 @@ const PaymentStatus = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-background lg:px-0 px-4">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-center">Error</CardTitle>
@@ -182,7 +184,7 @@ const PaymentStatus = () => {
             paymentData.message ||
             "Your payment has been processed successfully.",
           icon: (
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-green-200 flex items-center justify-center">
               <svg
                 className="w-10 h-10 text-green-600"
                 fill="none"
@@ -198,8 +200,8 @@ const PaymentStatus = () => {
               </svg>
             </div>
           ),
-          badge: <Badge className="bg-green-100 text-green-800">Success</Badge>,
-          color: "text-green-600",
+          badge: <Badge className="bg-green-200 text-green-800">Success</Badge>,
+          color: "text-green-500",
         };
       case "failed":
         return {
@@ -224,8 +226,8 @@ const PaymentStatus = () => {
               </svg>
             </div>
           ),
-          badge: <Badge className="bg-red-100 text-red-800">Failed</Badge>,
-          color: "text-red-600",
+          badge: <Badge className="bg-red-200 text-red-800">Failed</Badge>,
+          color: "text-red-500",
         };
       default:
         return {
@@ -261,7 +263,7 @@ const PaymentStatus = () => {
   const statusConfig = getStatusConfig();
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 lg:mt-44 mt-52">
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 lg:mt-40 mt-52">
       <div className="max-w-md mx-auto shadow-xl">
         <Card className="px-3">
           <CardHeader className="text-center">
@@ -273,7 +275,9 @@ const PaymentStatus = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between items-center py-2 border-b">
-                <span className="text-muted-foreground">Status:</span>
+                <span className="text-muted-foreground lg:text-md text-sm">
+                  Status:
+                </span>
                 {statusConfig.badge}
               </div>
 
@@ -284,7 +288,20 @@ const PaymentStatus = () => {
 
               <div className="flex justify-between py-2 border-b">
                 <span className="text-muted-foreground">UUID:</span>
-                <span className="font-medium">{paymentData.uuid || "N/A"}</span>
+
+                {/* Full UUID for desktop */}
+                <span className="font-medium hidden md:block">
+                  {paymentData.uuid || "N/A"}
+                </span>
+
+                {/* Truncated UUID for mobile */}
+                <span className="font-medium block md:hidden">
+                  {paymentData.uuid
+                    ? paymentData.uuid.length > 20
+                      ? `${paymentData.uuid.substring(0, 20)}...`
+                      : paymentData.uuid
+                    : "N/A"}
+                </span>
               </div>
 
               <div className="flex justify-between py-2 border-b">
@@ -298,7 +315,9 @@ const PaymentStatus = () => {
                 <div className="flex justify-between py-2 border-b">
                   <span className="text-muted-foreground">Amount:</span>
                   <span className="font-medium">
-                    ${paymentData.amount.toFixed(2)}
+                    {paymentData.amount
+                      ? `${paymentData.amount.toFixed(2)} BDT`
+                      : "0.00 BDT"}
                   </span>
                 </div>
               )}
@@ -311,7 +330,7 @@ const PaymentStatus = () => {
                 <Link href="/dashboard">Try Payment Again</Link>
               </Button>
             ) : (
-              <Button asChild className="w-full">
+              <Button asChild className="w-full rounded-lg">
                 <Link href="/dashboard">Go to Dashboard</Link>
               </Button>
             )}

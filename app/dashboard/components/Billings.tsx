@@ -247,7 +247,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
         <CardContent className="pt-4">
           <div className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-lg font-semibold text-primary">
+              <h4 className="lg:text-lg text-sm font-semibold text-primary">
                 Billing Table
               </h4>
             </div>
@@ -268,7 +268,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                   billings.map((billing, idx) => (
                     <TableRow key={idx}>
                       <TableCell>{billing.month}</TableCell>
-                      <TableCell>${billing.total}</TableCell>
+                      <TableCell>{billing.total}</TableCell>
                       <TableCell>{billing.dues}</TableCell>
                       <TableCell>{billing.paid}</TableCell>
                       <TableCell>{billing.remarks.by}</TableCell>
@@ -289,10 +289,11 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 disabled={currentPage === 1}
                 variant="outline"
                 className="border border-primary/60"
+                size={"sm"}
               >
                 Previous
               </Button>
-              <span className="flex items-center px-2">
+              <span className="flex items-center px-2 lg:text-sm text-xs">
                 Page {currentPage} of {lastPage}
               </span>
               <Button
@@ -300,6 +301,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 disabled={currentPage === lastPage}
                 variant="outline"
                 className="border border-primary/60"
+                size={"sm"}
               >
                 Next
               </Button>
@@ -353,7 +355,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
         <CardContent className="pt-4">
           <div className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-lg font-semibold text-primary">
+              <h4 className="lg:text-lg text-sm font-semibold text-primary">
                 Payment Table
               </h4>
             </div>
@@ -399,10 +401,11 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 disabled={currentPage === 1}
                 variant="outline"
                 className="border border-primary/60"
+                size={"sm"}
               >
                 Previous
               </Button>
-              <span className="flex items-center px-2">
+              <span className="flex items-center px-2 lg:text-sm text-xs">
                 Page {currentPage} of {lastPage}
               </span>
               <Button
@@ -410,6 +413,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 disabled={currentPage === lastPage}
                 variant="outline"
                 className="border border-primary/60"
+                size={"sm"}
               >
                 Next
               </Button>

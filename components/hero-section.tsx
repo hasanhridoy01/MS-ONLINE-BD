@@ -2,6 +2,7 @@
 
 import { useTheme } from '@/lib/theme-provider';
 import { ArrowRight, Globe } from 'lucide-react';
+import NewConnection from './NewConnection';
 
 export default function HeroSection() {
   const { theme } = useTheme();
@@ -17,7 +18,7 @@ export default function HeroSection() {
       className={`relative min-h-screen flex flex-col items-center justify-center md:pt-56 pt-52 ${themeBackgroundClass}`}
     >
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative">
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
           <h1 className="text-[28px] md:text-[40px] lg:text-[40px] font-[400] tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80 animate-gradient md:leading-[38px] leading-[28px] font-montserrat">
             Fast and Reliable <span className="text-primary">Internet</span>
@@ -40,7 +41,7 @@ export default function HeroSection() {
           </div>
 
           <button className="group bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-[8px] font-semibold text-base transition-all flex items-center gap-2 border border-primary/70">
-            Get a new connection NOW!
+            <NewConnection />
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

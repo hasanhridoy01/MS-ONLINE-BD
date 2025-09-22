@@ -29,6 +29,10 @@ import {
 } from "@/components/ui/select";
 import PaymentProcessing from "./PaymentProcessing";
 
+interface DialogProps {
+  triggerLabel: string;
+}
+
 export interface DealType {
   id: number;
   name: string;
@@ -55,7 +59,7 @@ export interface DataResponse {
   data: ConnectionType[];
 }
 
-export default function CreatePayment() {
+export default function CreatePayment({ triggerLabel,}: DialogProps) {
   const router = useRouter();
   const { msonline_auth } = useContext(AuthContext);
   const handleSnackbarOpen = useHandleSnackbar();
@@ -175,7 +179,7 @@ export default function CreatePayment() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 transition-colors rounded-[6px] font-inter lg:text-sm text-xs">
-            CREATE PAYMENT
+            {triggerLabel}
           </button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">

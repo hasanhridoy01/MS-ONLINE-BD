@@ -85,7 +85,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                 className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-all duration-200 ${
                   activeTab === item.id
                     ? "bg-primary/10 text-primary text-[16px] font-medium font-inter shadow-sm rounded-sm"
-                    : "text-foreground text-[16px] font-medium font-inter"
+                    : "text-muted-foreground text-[16px] font-medium font-inter"
                 }`}
               >
                 <Icon className="w-5 h-5 mr-3" />
@@ -98,9 +98,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         {/* User Info & Logout (Sticky at Bottom) */}
         <div className="p-4 mt-auto border-t border-primary/20">
           <div className="w-full my-3 flex justify-center">
-            <CreatePayment />
+            <CreatePayment triggerLabel={'Pay Bill'} />
           </div>
-          <div className="p-5 mb-4 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background shadow-sm hover:shadow-md transition-all duration-300">
+          <div className="p-5 mb-4 rounded-xl border border-primary/10 bg-gradient-to-br from-primary/5 via-background to-background shadow-sm hover:shadow-md transition-all duration-300">
             <h3 className="text-lg font-semibold text-foreground mb-3">
               👤 Profile Info
             </h3>

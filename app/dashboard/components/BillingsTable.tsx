@@ -279,7 +279,7 @@ const BillingsTable = () => {
               onClick={handlePrev}
               disabled={currentPage === 1}
               variant="outline"
-              className="border border-primary/60"
+              className="border border-primary/60 text-primary"
               size={"sm"}
             >
               Previous
@@ -291,7 +291,7 @@ const BillingsTable = () => {
               onClick={handleNext}
               disabled={currentPage === lastPage}
               variant="outline"
-              className="border border-primary/60"
+              className="border border-primary/60 text-primary"
               size={"sm"}
             >
               Next

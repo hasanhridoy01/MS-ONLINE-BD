@@ -1,11 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import ThemeSwitcher from "./theme-switcher";
 import { usePathname } from "next/navigation";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import LoginModal from "./login-modal";
+import { AuthContext } from "@/context/AuthContext";
+import { ChevronDown, LayoutDashboard, LogOut } from "lucide-react";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -19,6 +30,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { msonline_auth, user } = React.useContext<any>(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -106,7 +118,63 @@ export default function Navbar() {
 
                 {/* Login Modal */}
                 <div className="hidden lg:block">
-                  <LoginModal />
+                  {msonline_auth.token ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="flex items-center gap-3 rounded-xl border border-primary px-4 py-2 shadow-sm bg-primary/10 transition-all duration-200">
+                          <Avatar className="h-8 w-8 border-2 border-primary">
+                            <AvatarImage
+                              src={user?.avatarUrl || "/default-avatar.png"}
+                              alt={user?.name}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
+                              {user?.name?.[0]?.toUpperCase() ?? "U"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm font-semibold text-primary">
+                            {user?.name}
+                          </span>
+                        </button>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent
+                        align="end"
+                        className="w-56 border border-primary shadow-lg"
+                      >
+                        <DropdownMenuLabel>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-primary">
+                              {user?.name}
+                            </span>
+                            <span className="text-sm text-primary/80">
+                              {user?.email}
+                            </span>
+                          </div>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href="/dashboard"
+                            className="w-full flex items-center gap-2 text-primary hover:text-primary"
+                          >
+                            <LayoutDashboard className="h-4 w-4" />
+                            Dashboard
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          // onClick={logout}
+                          className="flex items-center gap-2 text-red-600 hover:bg-red-50"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          Logout
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <LoginModal />
+                  )}
                 </div>
 
                 {/* Mobile Hamburger */}

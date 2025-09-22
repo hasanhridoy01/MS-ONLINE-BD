@@ -62,7 +62,7 @@ export default function ContactSection() {
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="md:text-[32px] text-[24px] font-normal font-montserrat mb-2">
+          <h2 className="md:text-[32px] text-[24px] font-normal font-montserrat mb-2 text-primary">
             Contact Us
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter">
@@ -78,7 +78,7 @@ export default function ContactSection() {
                 <div>
                   <label
                     htmlFor="Name"
-                    className="block text-[15px] font-bold font-inter mb-1"
+                    className="block text-[15px] font-bold font-inter mb-1 text-black"
                   >
                     Full Name
                   </label>
@@ -99,7 +99,7 @@ export default function ContactSection() {
                 <div>
                   <label
                     htmlFor="phone"
-                    className="block text-[15px] font-bold font-inter mb-1"
+                    className="block text-[15px] font-bold font-inter mb-1 text-black"
                   >
                     Phone Number
                   </label>
@@ -123,7 +123,7 @@ export default function ContactSection() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-[15px] font-bold font-inter mb-1"
+                    className="block text-[15px] font-bold font-inter mb-1 text-black"
                   >
                     Email
                   </label>
@@ -143,7 +143,7 @@ export default function ContactSection() {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-[15px] font-bold font-inter mb-1"
+                  className="block text-[15px] font-bold font-inter mb-1 text-black"
                 >
                   Message
                 </label>
@@ -160,7 +160,7 @@ export default function ContactSection() {
               </div>
 
               <div>
-                <label className="block text-[15px] font-bold font-inter mb-2">
+                <label className="block text-[15px] font-bold font-inter mb-2 text-black">
                   Services
                 </label>
                 <div className="space-y-2">
@@ -234,7 +234,7 @@ export default function ContactSection() {
 
           <div className="space-y-8">
             <div>
-              <h3 className="text-[18px] font-semibold font-inter mb-1.5">
+              <h3 className="text-[18px] font-semibold font-inter mb-1.5 text-black">
                 Social media
               </h3>
               <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter mb-5">
@@ -278,7 +278,7 @@ export default function ContactSection() {
             </div>
 
             <div>
-              <h3 className="text-[18px] font-semibold font-inter mb-1.5">
+              <h3 className="text-[18px] font-semibold font-inter mb-1.5 text-black">
                 Reach us
               </h3>
               <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter mb-5">
@@ -308,7 +308,7 @@ export default function ContactSection() {
             </div>
 
             <div>
-              <h3 className="text-[18px] font-semibold font-inter mb-1.5">
+              <h3 className="text-[18px] font-semibold font-inter mb-1.5 text-black">
                 Visit us
               </h3>
               <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter mb-5">

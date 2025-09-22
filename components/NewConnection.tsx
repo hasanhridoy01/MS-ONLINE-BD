@@ -28,14 +28,9 @@ import { AuthContext } from "@/context/AuthContext";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import PaymentProcessing from "@/app/dashboard/components/PaymentProcessing";
+import { Package } from "../app/dashboard/components/Billings";
 
-interface ApplicationProps {
-  id: string;
-  title: string;
-  price: number;
-}
-
-export default function Application({ id, title, price }: ApplicationProps) {
+export default function NewConnection() {
   const { msonline_auth } = useContext(AuthContext);
   const handleSnackbarOpen = useHandleSnackbar();
   const [open, setOpen] = React.useState(false);
@@ -54,6 +49,7 @@ export default function Application({ id, title, price }: ApplicationProps) {
   const [zoneId, setZoneId] = useState<string>("");
   const [areaId, setAreaId] = useState<string>("");
   const [gatewayId, setGatewayId] = useState<string>("");
+  const [packageId, setPackageId] = useState<string>("");
 
   //get data state
   const [districts, setDistricts] = useState<any[]>([]);
@@ -61,6 +57,7 @@ export default function Application({ id, title, price }: ApplicationProps) {
   const [zones, setZones] = useState<any[]>([]);
   const [areas, setAreas] = useState<any[]>([]);
   const [gateway, setGateway] = useState<any[]>([]);
+  const [deals, setDeals] = useState<any[]>([]);
 
   //fetch districts on mount
   useEffect(() => {
@@ -170,6 +167,20 @@ export default function Application({ id, title, price }: ApplicationProps) {
     fetchGateway();
   }, [msonline_auth.access_token]);
 
+  useEffect(() => {
+    const fetchConnection = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/init`
+        );
+        setDeals(res.data.data.deals);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchConnection();
+  }, [msonline_auth.access_token]);
+
   //apply function
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -180,7 +191,7 @@ export default function Application({ id, title, price }: ApplicationProps) {
     formData.append("email", email);
     formData.append("mobile", mobile);
     formData.append("message", message);
-    formData.append("package_id", id);
+    formData.append("package_id", packageId);
     formData.append("district_id", districtId);
     formData.append("thana_id", thanaId);
     formData.append("zone_id", zoneId);
@@ -209,7 +220,7 @@ export default function Application({ id, title, price }: ApplicationProps) {
       }
 
       setOpen(false);
-      handleSnackbarOpen("Application submitted!", "success");
+      handleSnackbarOpen("NewConnection submitted!", "success");
     } catch (error: any) {
       console.error(error);
 
@@ -218,8 +229,8 @@ export default function Application({ id, title, price }: ApplicationProps) {
 
         // ✅ Show field-specific validation error if exists
         if (errors && Object.values(errors).length > 0) {
-          const firstErrorArray = Object.values(errors)[0] as string[]; // cast to string[]
-          const firstError = firstErrorArray[0]; // get the first message
+          const firstErrorArray = Object.values(errors)[0] as string[];
+          const firstError = firstErrorArray[0];
           handleSnackbarOpen(firstError, "error");
           return;
         }
@@ -243,27 +254,18 @@ export default function Application({ id, title, price }: ApplicationProps) {
     <div className="w-full">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <button
-            className={`mt-4 w-full py-2 text-[16px] font-inter font-semibold rounded-[8px] transition-all bg-primary/10 hover:bg-primary/30 text-primary border border-primary/60`}
-          >
-            Buy Package
-          </button>
+          <button>Get a new connection NOW!</button>
         </DialogTrigger>
         <DialogContent className="md:max-w-xl">
           <form onSubmit={handleSubmit}>
-            <DialogHeader className="space-y-1 text-center">
-              <DialogTitle className="text-xl font-semibold tracking-tight">
-                Apply for a Buy Package
-              </DialogTitle>
-              <p className="text-base font-medium text-primary">
-                {title} – {price} BDT
-              </p>
-              <DialogDescription className="text-sm text-muted-foreground">
-                Please fill out the form below to apply for this package.
+            <DialogHeader className="mb-4">
+              <DialogTitle>Apply for a New Connection</DialogTitle>
+              <DialogDescription>
+                Fill out the form below to apply for a new connection.
               </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4 my-3">
+            <div className="space-y-4 my-2">
               <div className="grid gap-3">
                 <Label htmlFor="customer-name">Customer Name</Label>
                 <Input
@@ -275,6 +277,26 @@ export default function Application({ id, title, price }: ApplicationProps) {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
+              <div className="grid gap-3">
+                <Label>Packages</Label>
+                <Select value={packageId} onValueChange={setPackageId}>
+                  <SelectTrigger className="w-full border border-primary bg-background px-3 py-2 rounded-[7px] focus:outline-none focus:ring-0 focus:border-primary">
+                    <SelectValue placeholder="Select package" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {deals.flatMap((deal) =>
+                        deal.items.map((item: any) => (
+                          <SelectItem key={item.id} value={String(item.id)}>
+                            {item.title}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* name + email */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="grid gap-3 relative">

@@ -59,7 +59,7 @@ export default function PackageCard({
         </div>
       )}
 
-      <h3 className="text-lg font-semibold mb-2 font-inter flex items-center gap-2">
+      <h3 className="text-lg font-semibold mb-2 font-inter flex items-center gap-2 text-primary">
         <svg
           width="24"
           height="24"
@@ -76,7 +76,7 @@ export default function PackageCard({
         {title}
       </h3>
 
-      <div className="text-[32px] font-normal mb-1 font-montserrat">
+      <div className="text-[32px] font-normal mb-1 font-montserrat text-primary">
         <span className={`${styles.accent} font-normal text-[32px]`}>
           ৳ {price}
         </span>
@@ -106,7 +106,7 @@ export default function PackageCard({
         ))}
       </div>
 
-      <Application id={id} />
+      <Application id={id} price={price} title={title} />
     </div>
   );
 }

@@ -288,7 +288,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 onClick={handlePrev}
                 disabled={currentPage === 1}
                 variant="outline"
-                className="border border-primary/60"
+                className="border border-primary/60 text-primary"
                 size={"sm"}
               >
                 Previous
@@ -300,7 +300,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 onClick={handleNext}
                 disabled={currentPage === lastPage}
                 variant="outline"
-                className="border border-primary/60"
+                className="border border-primary/60 text-primary"
                 size={"sm"}
               >
                 Next
@@ -400,7 +400,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 onClick={handlePrev}
                 disabled={currentPage === 1}
                 variant="outline"
-                className="border border-primary/60"
+                className="border border-primary/60 text-primary"
                 size={"sm"}
               >
                 Previous
@@ -412,7 +412,7 @@ const Billings: React.FC<BillingsProps> = ({ ConnectionId }) => {
                 onClick={handleNext}
                 disabled={currentPage === lastPage}
                 variant="outline"
-                className="border border-primary/60"
+                className="border border-primary/60 text-primary"
                 size={"sm"}
               >
                 Next

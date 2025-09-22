@@ -253,7 +253,7 @@ const PaymentTable = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <CreatePayment />
+              <CreatePayment triggerLabel={'Create Payment'} />
             </div>
           </div>
 
@@ -273,7 +273,7 @@ const PaymentTable = () => {
             <TableBody>
               {billingsLoading ? (
                 <TableRow>
-                  <TableCell colSpan={8}>Loading bills...</TableCell>
+                  <TableCell colSpan={8}>Loading payment...</TableCell>
                 </TableRow>
               ) : payment.length > 0 ? (
                 payment.map((billing) => (
@@ -290,7 +290,7 @@ const PaymentTable = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={8}>No bills found</TableCell>
+                  <TableCell colSpan={8}>No payments found</TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -301,7 +301,7 @@ const PaymentTable = () => {
               onClick={handlePrev}
               disabled={currentPage === 1}
               variant="outline"
-              className="border border-primary/60"
+              className="border border-primary/60 text-primary"
               size={"sm"}
             >
               Previous
@@ -313,7 +313,7 @@ const PaymentTable = () => {
               onClick={handleNext}
               disabled={currentPage === lastPage}
               variant="outline"
-              className="border border-primary/60"
+              className="border border-primary/60 text-primary"
               size={"sm"}
             >
               Next

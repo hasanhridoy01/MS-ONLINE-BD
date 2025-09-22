@@ -73,6 +73,7 @@ export default function AuthContextProvider({ children }) {
         logout,
         msonline_auth,
         isAuthenticated: msonline_auth.isAuthenticated,
+        user: msonline_auth.user,
       }}
     >
       {children}

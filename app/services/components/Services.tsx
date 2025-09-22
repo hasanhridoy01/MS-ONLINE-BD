@@ -56,7 +56,7 @@ export default function Services() {
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="md:text-[32px] text-[24px] font-normal font-montserrat mb-2">
+          <h2 className="md:text-[32px] text-[24px] font-normal font-montserrat mb-2 text-primary">
             Other Services
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter">

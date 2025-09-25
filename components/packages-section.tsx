@@ -96,22 +96,24 @@ export default function PackagesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {deals.map((deal) =>
-            deal.items
-              .slice(0, 4)
-              .map((item) => (
-                <PackageCard
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  price={item.package.price}
-                  speed={parseSpeed(item.package.speed)}
-                  features={getFeatures(item.attributes)}
-                  popular={false}
-                  color="silver"
-                />
-              ))
-          )}
+          {deals
+            .filter((deal) => deal.type === "Ganaral")
+            .flatMap((deal) =>
+              deal.items
+                .slice(0, 4)
+                .map((item) => (
+                  <PackageCard
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    price={item.package.price}
+                    speed={parseSpeed(item.package.speed)}
+                    features={getFeatures(item.attributes)}
+                    popular={false}
+                    color="silver"
+                  />
+                ))
+            )}
         </div>
 
         <div className="mt-12 text-center">

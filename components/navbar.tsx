@@ -106,7 +106,7 @@ export default function Navbar() {
 
               {/* Actions */}
               <div className="flex items-center gap-4">
-                <ThemeSwitcher />
+                {/* <ThemeSwitcher /> */}
 
                 {/* Login Modal */}
                 <div className="hidden lg:block">
@@ -132,7 +132,7 @@ export default function Navbar() {
 
                       <PopoverContent
                         align="end"
-                        className="w-56 border border-primary shadow-lg p-3"
+                        className="w-44 border border-primary shadow-lg p-3"
                       >
                         {/* Header */}
                         <div className="flex flex-col border-b border-primary/20 pb-2 mb-2">

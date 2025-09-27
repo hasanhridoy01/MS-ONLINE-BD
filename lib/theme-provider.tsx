@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = 'orange' | 'blue' | 'dark';
+type Theme = "orange" | "blue" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
@@ -12,25 +12,20 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('orange');
+  // Read default theme from .env or fallback to 'orange'
+  const envTheme = (process.env.NEXT_PUBLIC_THEME as Theme) || "orange";
+
+  const [theme, setTheme] = useState<Theme>(envTheme);
 
   useEffect(() => {
-    // Load theme from localStorage if available
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme && ['orange', 'blue', 'dark'].includes(savedTheme)) {
-      setTheme(savedTheme);
-    }
-  }, []);
+    // Set theme attribute on initial load
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme: handleThemeChange }}>
@@ -42,7 +37,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 }

@@ -20,6 +20,8 @@ const roboto = Roboto({
   variable: "--font-roboto-sans",
   subsets: ["latin"],
   weight: ["300", "400", "700"],
+  display: "swap",
+  preload: false, // Disable preloading
 });
 
 const kalam = Kalam({
@@ -46,11 +48,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-     <html lang="en">
+    <html lang="en">
       <body
         className={`${inter.variable} ${montserrat.variable} ${roboto.variable} ${kalam.variable}`}
       >
-        <Providers> {/* Use the client provider here */}
+        <Providers>
+          {" "}
+          {/* Use the client provider here */}
           <LayoutWrapper>{children}</LayoutWrapper>
         </Providers>
       </body>

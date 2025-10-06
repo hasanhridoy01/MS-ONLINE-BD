@@ -61,6 +61,8 @@ export default function NewConnection() {
 
   //fetch districts on mount
   useEffect(() => {
+    if (!open) return;
+
     const fetchDistricts = async () => {
       try {
         const res = await axios.get(
@@ -77,11 +79,12 @@ export default function NewConnection() {
       }
     };
     fetchDistricts();
-  }, [msonline_auth.access_token]);
+  }, [open, msonline_auth.access_token]);
 
   //fetch thana when district changes
   useEffect(() => {
-    if (!districtId) return;
+   if (!open || !districtId) return;
+
     const fetchThana = async () => {
       try {
         const res = await axios.get(
@@ -101,11 +104,12 @@ export default function NewConnection() {
       }
     };
     fetchThana();
-  }, [districtId, msonline_auth.access_token]);
+  }, [open, districtId, msonline_auth.access_token]);
 
   //fetch zones when thana changes
   useEffect(() => {
-    if (!thanaId) return;
+    if (!open || !thanaId) return;
+
     const fetchZones = async () => {
       try {
         const res = await axios.get(
@@ -124,11 +128,12 @@ export default function NewConnection() {
       }
     };
     fetchZones();
-  }, [thanaId, msonline_auth.access_token]);
+  }, [open, thanaId, msonline_auth.access_token]);
 
   //fetch areas when zone changes
   useEffect(() => {
-    if (!zoneId) return;
+    if (!open || !zoneId) return;
+
     const fetchAreas = async () => {
       try {
         const res = await axios.get(
@@ -146,9 +151,11 @@ export default function NewConnection() {
       }
     };
     fetchAreas();
-  }, [zoneId, msonline_auth.access_token]);
+  }, [open, zoneId, msonline_auth.access_token]);
 
   useEffect(() => {
+    if (!open) return;
+
     const fetchGateway = async () => {
       try {
         const res = await axios.get(
@@ -165,7 +172,7 @@ export default function NewConnection() {
       }
     };
     fetchGateway();
-  }, [msonline_auth.access_token]);
+  }, [open, msonline_auth.access_token]);
 
   useEffect(() => {
     const fetchConnection = async () => {

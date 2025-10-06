@@ -1,51 +1,9 @@
 "use client";
-
-import PackageCard from "@/components/package-card";
 import { useTheme } from "@/lib/theme-provider";
-import axios from "axios";
-import { useEffect, useState } from "react";
-
-interface Deal {
-  type: string;
-  items: PackageItem[];
-}
-
-interface PackageItem {
-  id: string;
-  title: string;
-  attributes: Attribute[];
-  deal_type: string;
-  package: Package;
-  package_description: string | null;
-}
-
-interface Attribute {
-  label: string;
-  value: string;
-}
-
-interface Package {
-  id: number;
-  code: string;
-  name: string;
-  type: string;
-  price: number;
-  bandwidth: string;
-  speed: string;
-  status: number;
-  deletable: number;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-  branch_id: number;
-  router_id: number;
-  reseller_id: number | null;
-  reseller_commission: number;
-}
+import { Download } from "lucide-react";
 
 export default function Packages() {
   const { theme } = useTheme();
-  const [deals, setDeals] = useState<Deal[]>([]);
 
   const themeBackgroundClass = {
     orange: "orange-body-background-color",
@@ -53,31 +11,7 @@ export default function Packages() {
     dark: "dark-body-background-color",
   }[theme];
 
-  const getPackage = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/init`
-      );
-      setDeals(res.data.data.deals);
-    } catch (error) {
-      console.error("Error fetching packages:", error);
-    }
-  };
-
-  useEffect(() => {
-    getPackage();
-  }, []);
-
-  // Extract features from attributes
-  const getFeatures = (attributes: Attribute[]): string[] => {
-    return attributes.map((attr) => `${attr.label}: ${attr.value}`);
-  };
-
-  // Parse speed from string to number
-  const parseSpeed = (speedString: string): number => {
-    const match = speedString.match(/(\d+)/);
-    return match ? parseInt(match[1]) : 0;
-  };
+  const pdfUrl = "https://billing.msonlinebd.com/default/MS-Online-1.pdf";
 
   return (
     <section
@@ -85,9 +19,9 @@ export default function Packages() {
       className={`md:py-24 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
     >
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div className="text-center mb-9">
           <h2 className="md:text-[32px] text-[24px] font-normal font-montserrat mb-2 text-primary">
-           BTRC Approved Packages
+            BTRC Approved Packages
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter">
             Packages and rates at Ms Online BD are always very competitive and
@@ -95,23 +29,35 @@ export default function Packages() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {deals
-            .filter((deal) => deal.type === "BTRC")
-            .flatMap((deal) =>
-              deal.items.map((item) => (
-                <PackageCard
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  price={item.package.price}
-                  speed={parseSpeed(item.package.speed)}
-                  features={getFeatures(item.attributes)}
-                  popular={false}
-                  color="silver"
-                />
-              ))
-            )}
+        {/* 📄 PDF Viewer Card */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-5xl bg-white rounded-xl shadow-sm border overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
+              <h3 className="font-inter font-semibold text-gray-800 text-sm md:text-base">
+                MS Online - BTRC Approved Package List
+              </h3>
+              <a
+                href={pdfUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-primary hover:text-primary/80 text-sm font-medium"
+              >
+                <Download className="w-4 h-4" />
+                Download
+              </a>
+            </div>
+
+            {/* Iframe */}
+            <div className="h-[500px] md:h-[700px]">
+              <iframe
+                src={pdfUrl}
+                title="msonline PDF"
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </div>
         </div>
       </div>
     </section>

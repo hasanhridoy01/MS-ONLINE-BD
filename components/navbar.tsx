@@ -10,6 +10,8 @@ import LoginModal from "./login-modal";
 import { AuthContext } from "@/context/AuthContext";
 import { ChevronDown, LayoutDashboard, LogOut } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import axios from "axios";
+import useHandleSnackbar from "@/lib/HandleSnakbar";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -23,9 +25,45 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const { msonline_auth, user } = React.useContext<any>(AuthContext);
+  const { msonline_auth, user, logout } = React.useContext<any>(AuthContext);
+  const handleSnackbarOpen = useHandleSnackbar();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  const handleLogOut = async () => {
+    // Close the menu
+    setIsMenuOpen(false);
+
+    // Confirm logout
+    const confirmed = window.confirm("Are you sure you want to log out?");
+    if (!confirmed) return;
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${msonline_auth.token}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        handleSnackbarOpen("Logout failed. Please try again.", "error", 3000);
+        return;
+      }
+
+      // Client-side logout
+      logout();
+
+      // ✅ Show toast
+      handleSnackbarOpen("Logout Successful", "success", 3000);
+    } catch (error) {
+      console.error("Error during logout:", error);
+      handleSnackbarOpen("An error occurred while logging out.", "error", 3000);
+    }
+  };
 
   return (
     <header className="w-full backdrop-blur-3xl transition-all duration-300 md:py-5 py-4 fixed top-0 z-50">
@@ -132,7 +170,7 @@ export default function Navbar() {
 
                       <PopoverContent
                         align="end"
-                        className="w-44 border border-primary shadow-lg p-3"
+                        className="w-44 shadow-lg p-3"
                       >
                         {/* Header */}
                         <div className="flex flex-col border-b border-primary/20 pb-2 mb-2">
@@ -156,8 +194,8 @@ export default function Navbar() {
 
                           {/* Logout */}
                           <button
-                            // onClick={logout}
-                            className="flex items-center gap-2 rounded-md px-2 py-1 text-sm text-red-600 hover:bg-red-50 transition"
+                            onClick={handleLogOut}
+                            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-red-600 hover:bg-red-50 transition"
                           >
                             <LogOut className="h-4 w-4" />
                             Logout
@@ -201,7 +239,64 @@ export default function Navbar() {
                 </nav>
                 {/* Login Modal */}
                 <div className="block lg:hidden mt-3">
-                  <LoginModal />
+                  {msonline_auth.token ? (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button className="flex items-center gap-3 rounded-xl border border-primary px-4 py-2 shadow-sm bg-primary/10 transition-all duration-200">
+                          <Avatar className="h-8 w-8 border-2 border-primary">
+                            <AvatarImage
+                              src={user?.avatarUrl || "/default-avatar.png"}
+                              alt={user?.name}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
+                              {user?.name?.[0]?.toUpperCase() ?? "U"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm font-semibold text-primary">
+                            {user?.name}
+                          </span>
+                        </button>
+                      </PopoverTrigger>
+
+                      <PopoverContent
+                        align="end"
+                        className="w-44 shadow-lg p-3"
+                      >
+                        {/* Header */}
+                        <div className="flex flex-col border-b border-primary/20 pb-2 mb-2">
+                          <span className="font-semibold text-primary">
+                            {user?.name}
+                          </span>
+                          <span className="text-sm text-primary/80">
+                            {user?.email}
+                          </span>
+                        </div>
+
+                        {/* Dashboard Link */}
+                        <div className="flex flex-col gap-2">
+                          <Link
+                            href="/dashboard"
+                            className="flex items-center gap-2 rounded-md px-2 py-1 text-sm text-primary hover:bg-primary/10 transition"
+                          >
+                            <LayoutDashboard className="h-4 w-4" />
+                            Dashboard
+                          </Link>
+
+                          {/* Logout */}
+                          <button
+                            onClick={handleLogOut}
+                            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-red-600 hover:bg-red-50 transition"
+                          >
+                            <LogOut className="h-4 w-4" />
+                            Logout
+                          </button>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  ) : (
+                    <LoginModal />
+                  )}
                 </div>
               </div>
             )}

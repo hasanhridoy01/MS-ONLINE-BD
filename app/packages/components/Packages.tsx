@@ -4,6 +4,7 @@ import PackageCard from "@/components/package-card";
 import { useTheme } from "@/lib/theme-provider";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Deal {
   type: string;
@@ -58,6 +59,7 @@ export default function Packages() {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/init`
       );
+      console.log(res.data.data.deals);
       setDeals(res.data.data.deals);
     } catch (error) {
       console.error("Error fetching packages:", error);
@@ -85,7 +87,8 @@ export default function Packages() {
       className={`md:py-24 py-20 transition-colors duration-300 ${themeBackgroundClass}`}
     >
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        {/* Header */}
+        <div className="text-center mb-7">
           <h2 className="md:text-[32px] text-[24px] font-normal font-montserrat mb-2 text-primary">
             Popular Packages
           </h2>
@@ -95,24 +98,104 @@ export default function Packages() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {deals
-            .filter((deal) => deal.type === "Ganaral")
-            .flatMap((deal) =>
-              deal.items.map((item) => (
-                <PackageCard
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  price={item.package.price}
-                  speed={parseSpeed(item.package.speed)}
-                  features={getFeatures(item.attributes)}
-                  popular={false}
-                  color="silver"
-                />
-              ))
-            )}
-        </div>
+        {/* Tabs */}
+        <Tabs defaultValue="general">
+          <TabsList
+            className="
+    mb-5 flex justify-center bg-transparent shadow-none
+    p-0 gap-0
+  "
+          >
+            <TabsTrigger
+              value="general"
+              className="
+      px-4 py-2 font-inter font-medium text-primary
+      rounded-t-none
+      data-[state=active]:bg-primary/10
+      data-[state=active]:text-primary
+      data-[state=active]:border-b-2
+      data-[state=active]:border-primary
+      data-[state=active]:shadow-none
+    "
+            >
+              General Packages
+            </TabsTrigger>
+            <TabsTrigger
+              value="BTRC"
+              className="
+      px-4 py-2 font-inter font-medium text-primary
+      rounded-t-none
+      data-[state=active]:bg-primary/10
+      data-[state=active]:text-primary
+      data-[state=active]:border-b-2
+      data-[state=active]:border-primary
+      data-[state=active]:shadow-none
+    "
+            >
+              BTRC Approved Packages
+            </TabsTrigger>
+          </TabsList>
+
+          {/* General Tab */}
+          <TabsContent value="general">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {deals
+                .filter((deal) => deal.type === "Ganaral")
+                .flatMap((deal) => deal.items).length > 0 ? (
+                deals
+                  .filter((deal) => deal.type === "Ganaral")
+                  .flatMap((deal) =>
+                    deal.items.map((item) => (
+                      <PackageCard
+                        key={item.id}
+                        id={item.id}
+                        title={item.title}
+                        price={item.package.price}
+                        speed={parseSpeed(item.package.speed)}
+                        features={getFeatures(item.attributes)}
+                        popular={false}
+                        color="silver"
+                      />
+                    ))
+                  )
+              ) : (
+                <p className="col-span-full text-center text-muted-foreground">
+                  No data available
+                </p>
+              )}
+            </div>
+          </TabsContent>
+
+          {/* BTRC Tab */}
+          <TabsContent value="BTRC">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {deals
+                .filter((deal) => deal.type === "BTRC")
+                .flatMap((deal) => deal.items).length > 0 ? (
+                deals
+                  .filter((deal) => deal.type === "BTRC")
+                  .flatMap((deal) =>
+                    deal.items.map((item) => (
+                      <PackageCard
+                        key={item.id}
+                        id={item.id}
+                        title={item.title}
+                        price={item.package.price}
+                        speed={parseSpeed(item.package.speed)}
+                        features={getFeatures(item.attributes)}
+                        popular={false}
+                        color="silver"
+                      />
+                    ))
+                  )
+              ) : (
+                <p className="col-span-full text-center text-muted-foreground">
+                  No data available
+                </p>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </section>
   );

@@ -1,11 +1,44 @@
 import Link from "next/link";
 import { Facebook, Instagram, Youtube, Wifi } from "lucide-react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface Option {
+  key: string;
+  value: string;
+}
+
+// ✅ Type for API response structure (optional but good practice)
+interface InitResponse {
+  data: {
+    options: Option[];
+  };
+}
 
 export default function Footer() {
+  const [options, setOptions] = useState<Option[]>([]);
+
+  const getOptions = async () => {
+    try {
+     const res = await axios.get<InitResponse>(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/init`
+      );
+
+      console.log("Options response:", res.data.data.options);
+      setOptions(res.data.data.options); 
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  useEffect(() => {
+    getOptions();
+  }, []);
   return (
     <footer className="bg-gradient-to-b from-background to-background/90 transition-colors duration-300 pt-16 pb-6">
       <div className="container mx-auto px-4">
         <div className="mb-10">
+          {/* <img src={options[0]?.value} alt={options[0]?.key} /> */}
           <img src="/logo.png" alt="" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">

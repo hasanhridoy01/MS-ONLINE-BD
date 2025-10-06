@@ -173,7 +173,7 @@ export default function ContactSection() {
                       value="New Connection"
                       checked={service === "New Connection"}
                       onChange={handleServiceChange}
-                      className="h-4 w-4 text-primary border-input rounded"
+                      className="h-4 w-4 text-primary accent-primary border-input rounded"
                     />
                     <label
                       htmlFor="newConnection"
@@ -191,7 +191,7 @@ export default function ContactSection() {
                       value="Internet Connection"
                       checked={service === "Internet Connection"}
                       onChange={handleServiceChange}
-                      className="h-4 w-4 text-primary border-input rounded"
+                      className="h-4 w-4 text-primary accent-primary border-input rounded"
                     />
                     <label
                       htmlFor="changeConnection"
@@ -209,7 +209,7 @@ export default function ContactSection() {
                       value="Other"
                       checked={service === "Other"}
                       onChange={handleServiceChange}
-                      className="h-4 w-4 text-primary border-input rounded"
+                      className="h-4 w-4 text-primary accent-primary border-input rounded"
                     />
                     <label
                       htmlFor="otherService"

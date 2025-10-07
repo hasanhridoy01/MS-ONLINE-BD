@@ -94,47 +94,28 @@ export default function Packages() {
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter">
             Packages and rates at Ms Online BD are always very competitive and
-            so they may change over time. Here is the present package list:
+            so they may change over time. Here is the present package list
           </p>
         </div>
 
         {/* Tabs */}
         <Tabs defaultValue="general">
-          <TabsList
-            className="
-    mb-5 flex justify-center bg-transparent shadow-none
-    p-0 gap-0
-  "
-          >
-            <TabsTrigger
-              value="general"
-              className="
-      px-4 py-2 font-inter font-medium text-primary
-      rounded-t-none
-      data-[state=active]:bg-primary/10
-      data-[state=active]:text-primary
-      data-[state=active]:border-b-2
-      data-[state=active]:border-primary
-      data-[state=active]:shadow-none
-    "
-            >
-              General Packages
-            </TabsTrigger>
-            <TabsTrigger
-              value="BTRC"
-              className="
-      px-4 py-2 font-inter font-medium text-primary
-      rounded-t-none
-      data-[state=active]:bg-primary/10
-      data-[state=active]:text-primary
-      data-[state=active]:border-b-2
-      data-[state=active]:border-primary
-      data-[state=active]:shadow-none
-    "
-            >
-              BTRC Approved Packages
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex justify-center">
+            <TabsList className="mb-2 flex items-center justify-center shadow-none bg-primary/10 w-fit rounded-md">
+              <TabsTrigger
+                value="general"
+                className="px-4 py-2 rounded-t-md font-inter font-medium text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              >
+                General Packages
+              </TabsTrigger>
+              <TabsTrigger
+                value="BTRC"
+                className="px-4 py-2 rounded-t-md font-medium font-inter text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
+              >
+                BTRC Approved Packages
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* General Tab */}
           <TabsContent value="general">

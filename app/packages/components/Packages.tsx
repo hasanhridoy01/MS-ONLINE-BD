@@ -100,22 +100,20 @@ export default function Packages() {
 
         {/* Tabs */}
         <Tabs defaultValue="general">
-          <div className="flex justify-center">
-            <TabsList className="mb-2 flex items-center justify-center shadow-none bg-primary/10 w-fit rounded-md">
-              <TabsTrigger
-                value="general"
-                className="px-4 py-2 rounded-t-md font-inter font-medium text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
-              >
-                General Packages
-              </TabsTrigger>
-              <TabsTrigger
-                value="BTRC"
-                className="px-4 py-2 rounded-t-md font-medium font-inter text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
-              >
-                BTRC Approved Packages
-              </TabsTrigger>
-            </TabsList>
-          </div>
+          <TabsList className="flex items-center justify-center shadow-none rounded-md bg-transparent border-b-2 border-primary/20 pb-0 mb-8">
+            <TabsTrigger
+              value="general"
+              className="px-4 py-2 rounded-t-md font-inter font-medium text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
+            >
+              General Packages
+            </TabsTrigger>
+            <TabsTrigger
+              value="BTRC"
+              className="px-4 py-2 rounded-t-md font-medium font-inter text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
+            >
+              BTRC Approved Packages
+            </TabsTrigger>
+          </TabsList>
 
           {/* General Tab */}
           <TabsContent value="general">

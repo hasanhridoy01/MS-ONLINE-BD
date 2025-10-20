@@ -29,7 +29,7 @@ export default function HeroSection() {
           </h2>
 
           <p className="text-foreground/80 text-[14px] font-medium font-inter mb-6 max-w-lg">
-            NetConnect delivers fast, reliable internet with personalized local
+            MSOnline delivers fast, reliable internet with personalized local
             support, ensuring seamless connectivity across the world.
           </p>
 

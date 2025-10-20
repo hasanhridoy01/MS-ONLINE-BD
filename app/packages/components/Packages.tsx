@@ -145,7 +145,7 @@ export default function Packages() {
             </div>
           </TabsContent>
 
-          {/* BTRC Tab */}
+          {/* BTRC Tabs */}
           <TabsContent value="BTRC">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {deals

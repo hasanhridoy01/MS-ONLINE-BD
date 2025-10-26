@@ -9,7 +9,7 @@ module.exports = {
         PORT: '3000',
         HOSTNAME: '127.0.0.1'
       },
-      instances: 'max',
+      instances: '4',
       exec_mode: 'cluster',
       max_memory_restart: '512M',
       out_file: '/var/log/pm2/web-out.log',

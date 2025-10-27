@@ -19,9 +19,9 @@ const navLinks = [
   // { name: "Our Pop", path: "/pop" },
   { name: "Pay Bill", path: "/dashboard" },
   { name: "Our Service", path: "/services" },
-  { name: "About Us", path: "/about" },
+  { name: "About Us", path: "a/about" },
   { name: "Contact", path: "/contact" },
-  { name: "Offer", path: "/offer" },
+  { name: "Offer", path: "a/offer" },
 ];
 
 export default function Navbar() {
@@ -102,7 +102,7 @@ export default function Navbar() {
                   BTRC Approved Tariff
                 </Link>
                 <Link
-                  href="#"
+                  href="/a/support"
                   className="hover:text-primary transition-colors font-medium font-roboto text-[13px] text-foreground/80"
                 >
                   Support

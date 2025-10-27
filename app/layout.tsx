@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter, Montserrat, Roboto, Kalam } from "next/font/google";
+import localFont from "next/font/local";
 import { ThemeProvider } from "@/lib/theme-provider";
 import Navbar from "@/components/navbar";
 import HeroSection from "@/components/hero-section";
@@ -10,30 +10,48 @@ import LayoutWrapper from "@/components/layout-wrapper";
 import { SnackbarProvider } from "notistack";
 import { Providers } from "@/components/providers";
 
-const inter = Inter({
+/* 🧩 Load Local Fonts */
+
+const inter = localFont({
+  src: [
+    { path: "../public/fonts/inter/static/Inter_24pt-Light.ttf", weight: "300", style: "normal" },
+    { path: "../public/fonts/inter/static/Inter_24pt-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/inter/static/Inter_24pt-SemiBold.ttf", weight: "600", style: "normal" },
+    { path: "../public/fonts/inter/static/Inter_28pt-Bold.ttf", weight: "700", style: "normal" },
+  ],
   variable: "--font-inter-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "600", "700"],
-});
-
-const roboto = Roboto({
-  variable: "--font-roboto-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
   display: "swap",
-  preload: false, // Disable preloading
 });
 
-const kalam = Kalam({
-  variable: "--font-kalam-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
+const roboto = localFont({
+  src: [
+    { path: "../public/fonts/roboto/static/Roboto-Light.ttf", weight: "300", style: "normal" },
+    { path: "../public/fonts/roboto/static/Roboto-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/roboto/static/Roboto-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-roboto-sans",
+  display: "swap",
 });
 
-const montserrat = Montserrat({
+const montserrat = localFont({
+  src: [
+    { path: "../public/fonts/montserrat/static/Montserrat-Light.ttf", weight: "300", style: "normal" },
+    { path: "../public/fonts/montserrat/static/Montserrat-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/montserrat/static/Montserrat-SemiBold.ttf", weight: "600", style: "normal" },
+    { path: "../public/fonts/montserrat/static/Montserrat-Bold.ttf", weight: "700", style: "normal" },
+  ],
   variable: "--font-montserrat-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "600", "700"],
+  display: "swap",
+});
+
+const kalam = localFont({
+  src: [
+    { path: "../public/fonts/kalam/Kalam-Light.ttf", weight: "300", style: "normal" },
+    { path: "../public/fonts/kalam/Kalam-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/kalam/Kalam-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-kalam-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -48,13 +66,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${montserrat.variable} ${roboto.variable} ${kalam.variable}`}
-      >
+    <html
+      lang="en"
+      className={`${inter.variable} ${montserrat.variable} ${roboto.variable} ${kalam.variable}`}
+    >
+      <body>
         <Providers>
-          {" "}
-          {/* Use the client provider here */}
           <LayoutWrapper>{children}</LayoutWrapper>
         </Providers>
       </body>

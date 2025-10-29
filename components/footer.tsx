@@ -24,7 +24,7 @@ export default function Footer() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/init`
       );
 
-      console.log("Options response:", res.data.data.options);
+      // console.log("Options response:", res.data.data.options);
       setOptions(res.data.data.options); 
     } catch (error) {
       console.error("Error fetching services:", error);

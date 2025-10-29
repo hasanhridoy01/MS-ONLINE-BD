@@ -110,7 +110,7 @@ const kalam = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "MSOnline - Fast & Reliable Internet",
+  title: `${process.env.NEXT_PUBLIC_COMPANY_NAME} - Fast & Reliable Internet`,
   description:
     "Fast, reliable internet with personalized local support for home and business",
   icons: {

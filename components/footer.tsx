@@ -214,7 +214,7 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <Wifi className="h-5 w-5 text-primary" />
             <p className="text-sm font-medium font-inter hover:text-foreground transition-colors">
-              Copyright © {new Date().getFullYear()} MS ONLINE BD
+              Copyright © {new Date().getFullYear()} {process.env.NEXT_PUBLIC_COMPANY_NAME} BD
             </p>
           </div>
           <div className="flex items-center gap-4">

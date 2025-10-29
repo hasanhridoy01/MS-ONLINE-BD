@@ -60,7 +60,7 @@ export default function ServicesSection() {
             Other Services
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter">
-            Ms Online now comes with an wide array of other services.
+            {process.env.NEXT_PUBLIC_COMPANY_NAME} now comes with an wide array of other services.
           </p>
         </div>
 

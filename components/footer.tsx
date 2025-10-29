@@ -55,7 +55,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/a/offer"
+                  href="/p/offer"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   Offer
@@ -71,7 +71,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/a/about"
+                  href="/p/about"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   About Us
@@ -87,7 +87,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/a/pop"
+                  href="/p/pop"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   Pop
@@ -103,7 +103,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/a/internet-connectivity"
+                  href="/p/internet-connectivity"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   Internet connectivity
@@ -111,7 +111,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/a/data-connectivity"
+                  href="/p/data-connectivity"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   Data connectivity
@@ -119,7 +119,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/a/home-internet"
+                  href="/p/home-internet"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   Home Internet
@@ -127,7 +127,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/a/security-surveillance"
+                  href="/p/security-surveillance"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   Security & Surveillance
@@ -135,7 +135,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/a/customer-service"
+                  href="/p/customer-service"
                   className="text-muted-foreground hover:text-foreground transition-colors text-[16px] font-medium font-inter"
                 >
                   Customer Service
@@ -219,13 +219,13 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-4">
             <Link
-              href="/a/terms-and-conditions"
+              href="/p/terms-and-conditions"
               className="hover:text-foreground transition-colors text-sm font-medium font-inter"
             >
               Terms & Conditions
             </Link>
             <Link
-              href="/a/privacy-policy"
+              href="/p/privacy-policy"
               className="hover:text-foreground transition-colors text-sm font-medium font-inter"
             >
               Privacy Policy

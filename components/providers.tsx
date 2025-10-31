@@ -10,12 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AppProvider>
       <AuthContextProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider>
           <SnackbarProvider 
             maxSnack={3}
             autoHideDuration={3000}

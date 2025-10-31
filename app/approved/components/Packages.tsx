@@ -24,7 +24,7 @@ export default function Packages() {
             BTRC Approved Packages
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter">
-            Packages and rates at Ms Online BD are always very competitive and
+            Packages and rates at {process.env.NEXT_PUBLIC_COMPANY_NAME} BD are always very competitive and
             so they may change over time. Here is the present package list:
           </p>
         </div>

@@ -1,3 +1,4 @@
+// components/navbar.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -13,10 +14,18 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import axios from "axios";
 import useHandleSnackbar from "@/lib/HandleSnakbar";
 
+interface Option {
+  key: string;
+  value: string | null;
+}
+
+interface NavbarProps {
+  options: Option[];
+}
+
 const navLinks = [
   { name: "Home", path: "/" },
   { name: "Packages", path: "/packages" },
-  // { name: "Our Pop", path: "/pop" },
   { name: "Pay Bill", path: "/dashboard" },
   { name: "Our Service", path: "/services" },
   { name: "About Us", path: "/p/about" },
@@ -24,11 +33,34 @@ const navLinks = [
   { name: "Offer", path: "/p/offer" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ options }: NavbarProps) {
   const { msonline_auth, user, logout } = React.useContext<any>(AuthContext);
   const handleSnackbarOpen = useHandleSnackbar();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  // Helper function to get option value by key
+  const getOptionValue = (key: string): string | null => {
+    const option = options.find((opt) => opt.key === key);
+    return option?.value || null;
+  };
+
+  // Get specific values for navbar
+  const companyEmail = getOptionValue("Company Email");
+  const companyMobile = getOptionValue("Company Mobile");
+
+  // Format mobile numbers
+  const formatMobileNumbers = (mobileString: string | null): string[] => {
+    if (!mobileString) return [];
+    return mobileString.split(",").map((num) => num.trim());
+  };
+
+  const mobileNumbers = formatMobileNumbers(companyMobile);
+  const displayMobile =
+    mobileNumbers.length > 0
+      ? mobileNumbers.join(" | ")
+      : "+09 639116116 | +880 1749090930";
+  const displayEmail = companyEmail || "info@msonlinebd.com";
 
   const handleLogOut = async () => {
     // Close the menu
@@ -76,16 +108,16 @@ export default function Navbar() {
                 <div className="flex items-center gap-2 pr-4 border-r-2 border-primary/50">
                   <Phone className="h-4 w-4 text-primary" />
                   <span className="font-medium font-roboto text-[13px] text-foreground/80">
-                    +09 639116116 | +880 1749090930
+                    {displayMobile}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4 text-primary" />
                   <a
-                    href="mailto:info@msonlinebd.com"
+                    href={`mailto:${displayEmail}`}
                     className="hover:text-primary transition-colors font-medium font-roboto text-[13px] text-foreground/80"
                   >
-                    info@msonlinebd.com
+                    {displayEmail}
                   </a>
                 </div>
               </div>

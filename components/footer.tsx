@@ -1,47 +1,64 @@
+// components/footer.tsx
 import Link from "next/link";
 import { Facebook, Instagram, Youtube, Wifi } from "lucide-react";
-import axios from "axios";
-import { useEffect, useState } from "react";
 
 interface Option {
   key: string;
-  value: string;
+  value: string | null;
 }
 
-// ✅ Type for API response structure (optional but good practice)
-interface InitResponse {
-  data: {
-    options: Option[];
-  };
+interface FooterProps {
+  options: Option[];
 }
 
-export default function Footer() {
-  const [options, setOptions] = useState<Option[]>([]);
-
-  const getOptions = async () => {
-    try {
-     const res = await axios.get<InitResponse>(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/init`
-      );
-
-      // console.log("Options response:", res.data.data.options);
-      setOptions(res.data.data.options); 
-    } catch (error) {
-      console.error("Error fetching services:", error);
-    }
+export default function Footer({ options }: FooterProps) {
+  // Helper function to get option value by key
+  const getOptionValue = (key: string): string | null => {
+    const option = options.find((opt) => opt.key === key);
+    return option?.value || null;
   };
 
-  useEffect(() => {
-    getOptions();
-  }, []);
+  // Get specific values
+  const footerLogo = getOptionValue("Footer Logo");
+  const companyName = getOptionValue("Company Name");
+  const companyEmail = getOptionValue("Company Email");
+  const companyMobile = getOptionValue("Company Mobile");
+  const facebookUrl = getOptionValue("Social Facebook");
+  const twitterUrl = getOptionValue("Social Twitter");
+  const linkedinUrl = getOptionValue("Social Linkedin");
+  const instagramUrl = getOptionValue("Social Instagram");
+  const youtubeUrl = getOptionValue("Social Youtube");
+
+  // Format mobile numbers
+  const formatMobileNumbers = (mobileString: string | null): string[] => {
+    if (!mobileString) return [];
+    return mobileString.split(",").map((num) => num.trim());
+  };
+
+  const mobileNumbers = formatMobileNumbers(companyMobile);
+
   return (
     <footer className="bg-gradient-to-b from-background to-background/90 transition-colors duration-300 pt-16 pb-6">
       <div className="container mx-auto px-4">
+        {/* Logo Section */}
         <div className="mb-10">
-          {/* <img src={options[0]?.value} alt={options[0]?.key} /> */}
-          <img src="/logo.png" alt="" />
+          {footerLogo ? (
+            <img
+              src={footerLogo}
+              alt={`${companyName} Logo`}
+              className="h-12 object-contain"
+            />
+          ) : (
+            <img
+              src="/logo.png"
+              alt={`${companyName} Logo`}
+              className="h-12 object-contain"
+            />
+          )}
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {/* MENU Section */}
           <div>
             <h3 className="text-[16px] font-bold mb-5 font-montserrat">MENU</h3>
             <ul className="space-y-3">
@@ -96,6 +113,7 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* OUR SERVICES Section */}
           <div>
             <h3 className="text-[16px] font-bold mb-5 font-montserrat">
               OUR SERVICES
@@ -144,30 +162,42 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* OFFICE Section */}
           <div>
             <h3 className="text-[16px] font-bold mb-5 font-montserrat">
               OFFICE
             </h3>
             <ul className="space-y-3">
-              <li className="flex items-center gap-4 text-muted-foreground text-[16px] font-medium font-inter">
+              <li className="flex items-start gap-4 text-muted-foreground text-[16px] font-medium font-inter">
                 <Phone />
                 <div>
-                  <p>+09 639116116</p>
-                  <p>+880 1749090930</p>
+                  {mobileNumbers.length > 0 ? (
+                    <p className="text-[14px] font-medium font-inter text-neutral-700">
+                      {mobileNumbers.join(" | ")}
+                    </p>
+                  ) : (
+                    <p className="text-[16px] font-medium font-inter text-neutral-700">
+                      +09 639116116 | +880 1749090930
+                    </p>
+                  )}
                 </div>
               </li>
               <li className="flex items-center gap-4 text-muted-foreground text-[16px] font-medium font-inter">
                 <Mail />
                 <div>
-                  <a
-                    href="mailto:info@netconnect.com"
-                    className="hover:text-foreground transition-colors text-[16px] font-medium font-inter"
-                  >
-                    info@netconnect.com
-                  </a>
+                  {companyEmail ? (
+                    <a
+                      href={`mailto:${companyEmail}`}
+                      className="hover:text-foreground transition-colors text-[16px] font-medium font-inter"
+                    >
+                      {companyEmail}
+                    </a>
+                  ) : (
+                    <span>No email available</span>
+                  )}
                 </div>
               </li>
-              <li className="flex items-center gap-4 text-muted-foreground text-[16px] font-medium font-inter">
+              <li className="flex items-start gap-4 text-muted-foreground text-[16px] font-medium font-inter">
                 <MapPin />
                 <address className="not-italic">
                   89/3 Water Works Road, Posta,
@@ -177,6 +207,7 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* CONNECT Section */}
           <div>
             <h3 className="text-[16px] font-bold mb-5 font-montserrat">
               CONNECT
@@ -185,36 +216,48 @@ export default function Footer() {
               Follow us on social media to find out the latest offers.
             </p>
             <div className="flex space-x-4">
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="h-5 w-5" />
-              </a>
+              {facebookUrl && (
+                <a
+                  href={facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="h-5 w-5" />
+                </a>
+              )}
+              {instagramUrl && (
+                <a
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="h-5 w-5" />
+                </a>
+              )}
+              {youtubeUrl && (
+                <a
+                  href="#"
+                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="h-5 w-5" />
+                </a>
+              )}
             </div>
           </div>
         </div>
 
+        {/* Footer Bottom */}
         <div className="py-6 flex flex-col md:flex-row justify-between md:items-center items-start gap-4 rounded-[12px] bg-primary/10 px-4">
           <div className="flex items-center gap-2">
             <Wifi className="h-5 w-5 text-primary" />
             <p className="text-sm font-medium font-inter hover:text-foreground transition-colors">
-              Copyright © {new Date().getFullYear()} {process.env.NEXT_PUBLIC_COMPANY_NAME} BD
+              Copyright © {new Date().getFullYear()}{" "}
+              {companyName || "MS Online"} BD
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -262,6 +305,7 @@ export default function Footer() {
   );
 }
 
+// SVG Components (keep these as they are)
 function Phone() {
   return (
     <svg
@@ -274,7 +318,7 @@ function Phone() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-phone text-primary"
+      className="lucide lucide-phone text-primary mt-1 flex-shrink-0"
     >
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
     </svg>
@@ -293,7 +337,7 @@ function Mail() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-mail text-primary"
+      className="lucide lucide-mail text-primary flex-shrink-0"
     >
       <rect width="20" height="16" x="2" y="4" rx="2" />
       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
@@ -313,7 +357,7 @@ function MapPin() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-map-pin text-primary"
+      className="lucide lucide-map-pin text-primary mt-1 flex-shrink-0"
     >
       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
       <circle cx="12" cy="10" r="3" />

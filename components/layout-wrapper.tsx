@@ -4,8 +4,8 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/navbar";
-import HeroSection from "@/components/hero-section";
 import Footer from "@/components/footer";
+import { useApp } from "@/context/AppContext";
 
 export default function LayoutWrapper({
   children,
@@ -13,6 +13,7 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { options } = useApp();
   const isDashboard = pathname.startsWith("/dashboard");
   const isPayment = pathname.startsWith("/payment");
 
@@ -47,12 +48,12 @@ export default function LayoutWrapper({
   return (
     <>
       <div>
-        <Navbar />
+        <Navbar options={options} />
       </div>
 
       {children}
 
-      <Footer />
+      <Footer options={options} />
 
       {showButton && (
         <button

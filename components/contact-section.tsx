@@ -1,10 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Mail,
+  MapPin,
+  Phone,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+  Youtube,
+} from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import axios from "axios";
 import useHandleSnackbar from "@/lib/HandleSnakbar";
+
+interface Option {
+  key: string;
+  value: string | null;
+}
+
+interface InitResponse {
+  data: {
+    options: Option[];
+  };
+}
 
 export default function ContactSection() {
   const { theme } = useTheme();
@@ -14,6 +34,7 @@ export default function ContactSection() {
   const [mobile, setMobile] = useState("");
   const [message, setMessage] = useState("");
   const [service, setService] = useState("");
+  const [options, setOptions] = useState<Option[]>([]);
 
   const themeBackgroundClass = {
     orange: "orange-body-background-color",
@@ -54,6 +75,83 @@ export default function ContactSection() {
       handleSnackbarOpen("Failed", "error", 3000);
     }
   };
+
+  const getOptions = async () => {
+    try {
+      const res = await axios.get<InitResponse>(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/init`
+      );
+      setOptions(res.data.data.options);
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    }
+  };
+
+  useEffect(() => {
+    getOptions();
+  }, []);
+
+  // Helper function to get option value by key
+  const getOptionValue = (key: string): string | null => {
+    const option = options.find((opt) => opt.key === key);
+    return option?.value || null;
+  };
+
+  // Get specific values
+  const companyName = getOptionValue("Company Name");
+  const companyEmail = getOptionValue("Company Email");
+  const companyMobile = getOptionValue("Company Mobile");
+  const facebookUrl = getOptionValue("Social Facebook");
+  const twitterUrl = getOptionValue("Social Twitter");
+  const linkedinUrl = getOptionValue("Social Linkedin");
+  const instagramUrl = getOptionValue("Social Instagram");
+
+  // Format mobile numbers
+  const formatMobileNumbers = (mobileString: string | null): string[] => {
+    if (!mobileString) return [];
+    return mobileString.split(",").map((num) => num.trim());
+  };
+
+  const mobileNumbers = formatMobileNumbers(companyMobile);
+
+  // Social media data with icons and labels
+  const socialMediaLinks = [
+    {
+      platform: "Facebook",
+      url: facebookUrl,
+      icon: Facebook,
+      label: "Like us.",
+      color: "text-blue-600",
+      bgColor: "bg-blue-100",
+    },
+    {
+      platform: "Twitter",
+      url: twitterUrl,
+      icon: Twitter,
+      label: "Follow us.",
+      color: "text-sky-500",
+      bgColor: "bg-sky-100",
+    },
+    {
+      platform: "LinkedIn",
+      url: linkedinUrl,
+      icon: Linkedin,
+      label: "Connect with us.",
+      color: "text-blue-700",
+      bgColor: "bg-blue-100",
+    },
+    {
+      platform: "Instagram",
+      url: instagramUrl,
+      icon: Instagram,
+      label: "Follow us.",
+      color: "text-pink-600",
+      bgColor: "bg-pink-100",
+    },
+  ];
+
+  // Filter out social media links that don't have URLs
+  const activeSocialLinks = socialMediaLinks.filter((social) => social.url);
 
   return (
     <section
@@ -241,39 +339,68 @@ export default function ContactSection() {
                 Keep an eye at our social media pages & never miss offers.
               </p>
               <div className="space-y-3">
-                <a
-                  href="#"
-                  className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
-                >
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-primary">f</span>
-                  </div>
-                  <span className="text-[16px] font-semibold font-inter underline">
-                    Like us.
-                  </span>
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
-                >
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-primary">in</span>
-                  </div>
-                  <span className="text-[16px] font-semibold font-inter underline">
-                    Follow us.
-                  </span>
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
-                >
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-primary">yt</span>
-                  </div>
-                  <span className="text-[16px] font-semibold font-inter underline">
-                    Subscribe to your channel.
-                  </span>
-                </a>
+                {facebookUrl && (
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-primary">f</span>
+                    </div>
+                    <span className="text-[16px] font-semibold font-inter underline">
+                      Like us.
+                    </span>
+                  </a>
+                )}
+
+                {linkedinUrl && (
+                  <a
+                    href={linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-primary">in</span>
+                    </div>
+                    <span className="text-[16px] font-semibold font-inter underline">
+                      Follow us.
+                    </span>
+                  </a>
+                )}
+
+                {instagramUrl && (
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-primary">yt</span>
+                    </div>
+                    <span className="text-[16px] font-semibold font-inter underline">
+                      Subscribe to your channel.
+                    </span>
+                  </a>
+                )}
+
+                {/* Fallback if no social links are available */}
+                {!facebookUrl && !linkedinUrl && !instagramUrl && (
+                  <a
+                    href="#"
+                    className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-primary">f</span>
+                    </div>
+                    <span className="text-[16px] font-semibold font-inter underline">
+                      Like us.
+                    </span>
+                  </a>
+                )}
               </div>
             </div>
 
@@ -289,7 +416,9 @@ export default function ContactSection() {
                   <Phone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
                     <p className="text-[16px] font-semibold font-inter text-neutral-700">
-                      +09 639116116 | +880 1749090930
+                      {companyMobile
+                        ? companyMobile.replace(/,/g, " | ")
+                        : "+09 639116116 | +880 1749090930"}
                     </p>
                   </div>
                 </div>
@@ -297,10 +426,10 @@ export default function ContactSection() {
                   <Mail className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div className="">
                     <a
-                      href="mailto:info@exampleisp.com"
+                      href={`mailto:${companyEmail || "info@netconnect.com"}`}
                       className="text-[16px] font-semibold font-inter text-neutral-700 underline hover:text-primary transition-colors"
                     >
-                      info@netconnect.com
+                      {companyEmail || "info@netconnect.com"}
                     </a>
                   </div>
                 </div>

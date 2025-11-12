@@ -47,6 +47,8 @@ interface Package {
 export default function Packages() {
   const { theme } = useTheme();
   const [deals, setDeals] = useState<Deal[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("");
+  const [loading, setLoading] = useState(true);
 
   const themeBackgroundClass = {
     orange: "orange-body-background-color",
@@ -56,13 +58,22 @@ export default function Packages() {
 
   const getPackage = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/init`
       );
-      console.log(res.data.data.deals);
-      setDeals(res.data.data.deals);
+      // console.log("API Response:", res.data.data.deals);
+      const dealsData = res.data.data.deals;
+      setDeals(dealsData);
+
+      // Set the first deal type as default active tab
+      if (dealsData.length > 0) {
+        setActiveTab(dealsData[0].type);
+      }
     } catch (error) {
       console.error("Error fetching packages:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,6 +92,9 @@ export default function Packages() {
     return match ? parseInt(match[1]) : 0;
   };
 
+  // Get unique deal types for tabs
+  const dealTypes = deals.map((deal) => deal.type);
+
   return (
     <section
       id="packages"
@@ -93,88 +107,70 @@ export default function Packages() {
             Popular Packages
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto text-[14px] font-medium font-inter">
-            Packages and rates at {process.env.NEXT_PUBLIC_COMPANY_NAME} BD are always very competitive and
-            so they may change over time. Here is the present package list
+            Packages and rates at {process.env.NEXT_PUBLIC_COMPANY_NAME} BD are
+            always very competitive and so they may change over time. Here is
+            the present package list
           </p>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="general">
-          <TabsList className="flex items-center justify-center shadow-none rounded-md bg-transparent border-b-2 border-primary/20 pb-0 mb-8">
-            <TabsTrigger
-              value="general"
-              className="px-4 py-2 rounded-t-md font-inter font-medium text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
-            >
-              General Packages
-            </TabsTrigger>
-            <TabsTrigger
-              value="BTRC"
-              className="px-4 py-2 rounded-t-md font-medium font-inter text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm"
-            >
-              BTRC Approved Packages
-            </TabsTrigger>
-          </TabsList>
+        {/* Dynamic Tabs */}
+        {dealTypes.length > 0 ? (
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList className="flex items-center justify-center shadow-none rounded-md bg-transparent border-b-2 border-primary/20 pb-0 mb-8 overflow-x-auto">
+              {dealTypes.map((dealType) => (
+                <TabsTrigger
+                  key={dealType}
+                  value={dealType}
+                  className="px-4 py-2 rounded-t-md font-inter font-medium text-primary data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm whitespace-nowrap transition-all duration-200"
+                >
+                  {dealType}
+                </TabsTrigger>
+              ))}
+            </TabsList>
 
-          {/* General Tab */}
-          <TabsContent value="general">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {deals
-                .filter((deal) => deal.type === "Ganaral")
-                .flatMap((deal) => deal.items).length > 0 ? (
-                deals
-                  .filter((deal) => deal.type === "Ganaral")
-                  .flatMap((deal) =>
-                    deal.items.map((item) => (
-                      <PackageCard
-                        key={item.id}
-                        id={item.id}
-                        title={item.title}
-                        price={item.package.price}
-                        speed={parseSpeed(item.package.speed)}
-                        features={getFeatures(item.attributes)}
-                        popular={false}
-                        color="silver"
-                      />
-                    ))
-                  )
-              ) : (
-                <p className="col-span-full text-center text-muted-foreground">
-                  No data available
-                </p>
-              )}
-            </div>
-          </TabsContent>
+            {dealTypes.map((dealType) => {
+              const currentDeal = deals.find((deal) => deal.type === dealType);
+              const packageItems = currentDeal?.items || [];
 
-          {/* BTRC Tabs */}
-          <TabsContent value="BTRC">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {deals
-                .filter((deal) => deal.type === "BTRC")
-                .flatMap((deal) => deal.items).length > 0 ? (
-                deals
-                  .filter((deal) => deal.type === "BTRC")
-                  .flatMap((deal) =>
-                    deal.items.map((item) => (
-                      <PackageCard
-                        key={item.id}
-                        id={item.id}
-                        title={item.title}
-                        price={item.package.price}
-                        speed={parseSpeed(item.package.speed)}
-                        features={getFeatures(item.attributes)}
-                        popular={false}
-                        color="silver"
-                      />
-                    ))
-                  )
-              ) : (
-                <p className="col-span-full text-center text-muted-foreground">
-                  No data available
-                </p>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
+              return (
+                <TabsContent key={dealType} value={dealType} className="mt-0">
+                  {packageItems.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                      {packageItems.map((item) => (
+                        <PackageCard
+                          key={item.id}
+                          id={item.id}
+                          title={item.title}
+                          price={item.package.price}
+                          speed={parseSpeed(item.package.speed)}
+                          features={getFeatures(item.attributes)}
+                          popular={false}
+                          color="silver"
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-muted-foreground">
+                        No packages available for {dealType}
+                      </p>
+                    </div>
+                  )}
+                </TabsContent>
+              );
+            })}
+          </Tabs>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">
+              No packages available at the moment.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

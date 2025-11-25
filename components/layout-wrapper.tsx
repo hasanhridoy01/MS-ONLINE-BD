@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { useApp } from "@/context/AppContext";
+import OfferPopup from "@/components/OfferPopup";
 
 export default function LayoutWrapper({
   children,
@@ -50,6 +51,8 @@ export default function LayoutWrapper({
       <div>
         <Navbar options={options} />
       </div>
+
+      <OfferPopup />
 
       {children}
 

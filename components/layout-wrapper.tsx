@@ -52,7 +52,7 @@ export default function LayoutWrapper({
         <Navbar options={options} />
       </div>
 
-      <OfferPopup />
+      <OfferPopup options={options} />
 
       {children}
 

@@ -37,8 +37,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const menuItems = [
     { id: "connections", label: "Connections", icon: BluetoothConnected },
     // { id: "billing", label: "Billings", icon: Receipt },
-    { id: "billingTable", label: "Billing Table", icon: Receipt },
-    { id: "paymentsTable", label: "Payments Table", icon: CreditCard },
+    { id: "billingTable", label: "Billing", icon: Receipt },
+    { id: "paymentsTable", label: "Payments", icon: CreditCard },
   ];
 
   const getProfile = async () => {

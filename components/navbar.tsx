@@ -46,6 +46,8 @@ export default function Navbar({ options }: NavbarProps) {
   };
 
   // Get specific values for navbar
+  const logo = getOptionValue("Logo");
+  const companyName = getOptionValue("Company Name");
   const companyEmail = getOptionValue("Company Email");
   const companyMobile = getOptionValue("Company Mobile");
 
@@ -150,11 +152,19 @@ export default function Navbar({ options }: NavbarProps) {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2">
-                <img
-                  src="/logo.png"
-                  alt="NetConnect Logo"
-                  className="h-10 w-auto"
-                />
+                {logo ? (
+                  <img
+                    src={logo}
+                    alt={`${companyName} Logo`}
+                    className="h-12 object-contain"
+                  />
+                ) : (
+                  <img
+                    src="/logo.png"
+                    alt={`${companyName} Logo`}
+                    className="h-12 object-contain"
+                  />
+                )}
               </Link>
 
               {/* Desktop Navigation */}

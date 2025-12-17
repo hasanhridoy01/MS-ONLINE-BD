@@ -99,6 +99,7 @@ export default function ContactSection() {
 
   // Get specific values
   const companyName = getOptionValue("Company Name");
+  const companyAddress = getOptionValue("Company Address");
   const companyEmail = getOptionValue("Company Email");
   const companyMobile = getOptionValue("Company Mobile");
   const facebookUrl = getOptionValue("Social Facebook");
@@ -446,7 +447,7 @@ export default function ContactSection() {
               <div className="flex items-start gap-2">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <address className="not-italic text-[16px] font-semibold font-inter text-neutral-700 underline">
-                  89/3 Water Works Road, Posta, Chawakbazar, Dhaka-1211, BD
+                  {companyAddress ? companyAddress : "No address available"}
                 </address>
               </div>
             </div>

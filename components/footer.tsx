@@ -21,6 +21,7 @@ export default function Footer({ options }: FooterProps) {
   // Get specific values
   const footerLogo = getOptionValue("Footer Logo");
   const companyName = getOptionValue("Company Name");
+  const companyAddress = getOptionValue("Company Address");
   const companyEmail = getOptionValue("Company Email");
   const companyMobile = getOptionValue("Company Mobile");
   const facebookUrl = getOptionValue("Social Facebook");
@@ -200,8 +201,7 @@ export default function Footer({ options }: FooterProps) {
               <li className="flex items-start gap-4 text-muted-foreground text-[16px] font-medium font-inter">
                 <MapPin />
                 <address className="not-italic">
-                  89/3 Water Works Road, Posta,
-                  <br /> Chawakbazar, Dhaka-1211, BD
+                  {companyAddress ? companyAddress : "No address available"}
                 </address>
               </li>
             </ul>
